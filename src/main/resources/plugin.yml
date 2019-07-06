@@ -1,0 +1,21 @@
+name: ${name}
+version: ${project.version}
+main: ${mainClass}
+authors: [royalkingkb]
+api-version: 1.13
+
+commands:
+  vote:
+  rules:
+  map:
+  fly:
+    permission: mcatlas.command.fly
+  broadcast:
+    permission: mcatlas.command.broadcast
+  tp:
+    aliases: [teleport, tphere, back]
+    permission: mcatlas.command.tp
+  speed:
+    permission: mcatlas.command.speed
+  entitycount:
+    permission: mcatlas.command.entitycount
