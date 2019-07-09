@@ -8,6 +8,7 @@ commands:
   vote:
   rules:
   map:
+  seen:
   fly:
     permission: mcatlas.command.fly
   broadcast:
