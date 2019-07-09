@@ -44,6 +44,12 @@ public class HelpersPlugin extends JavaPlugin implements Listener {
             player.playSound(player.getLocation(), Sound.BLOCK_BEACON_ACTIVATE, 2.0F, 0.2F);
         }, 10);
 
+        if (player.getBedSpawnLocation() == null) {
+            player.setCompassTarget(player.getLocation());
+        } else {
+            player.setCompassTarget(player.getBedSpawnLocation());
+        }
+
         player.sendMessage("");
         player.sendMessage("");
         player.sendMessage("");

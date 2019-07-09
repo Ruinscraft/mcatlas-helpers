@@ -14,6 +14,7 @@ public class BedListener implements Listener {
             if (event.getClickedBlock().getType().name().contains("_BED")) {
                 event.getPlayer().sendMessage(ChatColor.GRAY + "Set your spawnpoint.");
                 event.getPlayer().setBedSpawnLocation(event.getClickedBlock().getLocation());
+                event.getPlayer().setCompassTarget(event.getPlayer().getBedSpawnLocation());
             }
         }
     }
