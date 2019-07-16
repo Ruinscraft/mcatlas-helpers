@@ -9,6 +9,8 @@ commands:
   rules:
   map:
   seen:
+  help:
+    aliases: [helpme, wiki, website, tutorial]
   uptime:
     aliases: [gc]
   suicide:

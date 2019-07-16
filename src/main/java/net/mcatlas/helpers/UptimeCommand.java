@@ -20,6 +20,7 @@ public class UptimeCommand implements CommandExecutor {
 
         sender.sendMessage(ChatColor.YELLOW + "The server has been up for " + DurationFormatUtils.formatDurationWords(diff, true, true));
 
+
         return true;
     }
 
