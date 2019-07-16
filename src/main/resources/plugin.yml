@@ -9,6 +9,10 @@ commands:
   rules:
   map:
   seen:
+  uptime:
+    aliases: [gc]
+  suicide:
+    aliases: [killme, endme] # I purposely did not use /kill for this one
   fly:
     permission: mcatlas.command.fly
   broadcast:

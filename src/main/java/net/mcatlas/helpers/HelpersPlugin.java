@@ -20,6 +20,8 @@ public class HelpersPlugin extends JavaPlugin implements Listener {
         getCommand("rules").setExecutor(new RulesCommand());
         getCommand("map").setExecutor(new MapCommand());
         getCommand("seen").setExecutor(new SeenCommand());
+        getCommand("uptime").setExecutor(new UptimeCommand());
+        getCommand("suicide").setExecutor(new SuicideCommand());
         getCommand("fly").setExecutor(new FlyCommand());
         getCommand("broadcast").setExecutor(new BroadcastCommand());
         getCommand("tp").setExecutor(new TPCommand());
