@@ -28,6 +28,7 @@ public class HelpersPlugin extends JavaPlugin implements Listener {
         getCommand("tp").setExecutor(new TPCommand());
         getCommand("speed").setExecutor(new SpeedCommand());
         getCommand("entitycount").setExecutor(new EntityCountCommand());
+        getCommand("near").setExecutor(new NearCommand());
     }
 
     @EventHandler
