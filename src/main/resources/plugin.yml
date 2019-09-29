@@ -9,6 +9,8 @@ commands:
   rules:
   map:
   seen:
+  near:
+    aliases: [nearby]
   help:
     aliases: [helpme, wiki, website, tutorial]
   uptime:
