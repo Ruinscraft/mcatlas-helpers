@@ -25,6 +25,7 @@ public class SeenCommand implements CommandExecutor {
         }
 
         if (target.isOnline()) {
+        	
             sender.sendMessage(ChatColor.GREEN + target.getName() + " is online.");
             return true;
         }

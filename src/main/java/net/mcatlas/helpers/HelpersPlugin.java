@@ -1,5 +1,8 @@
 package net.mcatlas.helpers;
 
+import java.util.Map;
+import java.util.UUID;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
@@ -12,8 +15,18 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class HelpersPlugin extends JavaPlugin implements Listener {
 
+	public Map<UUID, Long> players;
+
+	public static HelpersPlugin plugin;
+
+	public static HelpersPlugin get() {
+		return plugin;
+	}
+
     @Override
     public void onEnable() {
+    	plugin = this;
+
         getServer().getPluginManager().registerEvents(this, this);
         getServer().getPluginManager().registerEvents(new BedListener(), this);
         getCommand("vote").setExecutor(new VoteCommand());
@@ -29,6 +42,11 @@ public class HelpersPlugin extends JavaPlugin implements Listener {
         getCommand("speed").setExecutor(new SpeedCommand());
         getCommand("entitycount").setExecutor(new EntityCountCommand());
         getCommand("near").setExecutor(new NearCommand());
+    }
+
+    @Override
+    public void onDisable() {
+    	this.plugin = null;
     }
 
     @EventHandler
@@ -65,11 +83,18 @@ public class HelpersPlugin extends JavaPlugin implements Listener {
         player.sendMessage("");
         player.sendMessage("");
         player.sendMessage("");
+
+        this.players.put(player.getUniqueId(), System.currentTimeMillis());
     }
 
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
         event.setQuitMessage(null);
+        this.players.remove(event.getPlayer().getUniqueId());
+    }
+
+    public long getTimeOnline(Player player) {
+    	return this.players.get(player.getUniqueId());
     }
 
 }

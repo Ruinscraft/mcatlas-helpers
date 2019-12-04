@@ -21,6 +21,14 @@ public class SpeedCommand implements CommandExecutor {
             player.setFlySpeed(0.99F);
         }
 
+        if (args.length > 0) {
+        	float speed = 0;
+        	try {
+        		speed = Float.valueOf(args[0]);
+        	} catch (Exception e) {}
+        	player.setFlySpeed(speed);
+        }
+
         player.sendMessage("Flight speed toggled");
 
         return true;
