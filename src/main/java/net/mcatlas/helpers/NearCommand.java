@@ -29,16 +29,22 @@ public class NearCommand implements CommandExecutor {
     		}
     	}
 
+    	if (nearPlayers.isEmpty()) {
+    		list = list + ChatColor.GRAY + "None";
+    	}
+
     	sender.sendMessage(list);
         return true;
     }
 
-    public Map<Player, Integer> getNearbyPlayers(Player firstPlayer, double distance) {
+    public Map<Player, Integer> getNearbyPlayers(Player firstPlayer, double maxDistance) {
     	Map<Player, Integer> map = new HashMap<Player, Integer>();
 
     	for (Player player : firstPlayer.getWorld().getPlayers()) {
-    		if (player.getLocation().distance(firstPlayer.getLocation()) <= distance) {
-    			map.put(player, (int) distance);
+    		if (player.equals(firstPlayer)) continue;
+    		int playerDistance = (int) player.getLocation().distance(firstPlayer.getLocation());
+    		if (player.getLocation().distance(firstPlayer.getLocation()) <= maxDistance) {
+    			map.put(player, (int) playerDistance);
     		}
     	}
 

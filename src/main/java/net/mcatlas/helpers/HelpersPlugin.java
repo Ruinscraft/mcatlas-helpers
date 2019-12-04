@@ -1,5 +1,7 @@
 package net.mcatlas.helpers;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -30,6 +32,12 @@ public class HelpersPlugin extends JavaPlugin implements Listener {
     @Override
     public void onEnable() {
     	plugin = this;
+    	
+    	this.players = new HashMap<UUID, Long>();
+    	for (Player player : Bukkit.getOnlinePlayers()) {
+    		this.players.put(player.getUniqueId(), System.currentTimeMillis());
+    	}
+    	this.recentDeaths = new HashSet<UUID>();
 
         getServer().getPluginManager().registerEvents(this, this);
         getServer().getPluginManager().registerEvents(new BedListener(), this);

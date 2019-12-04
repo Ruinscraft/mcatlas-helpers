@@ -44,6 +44,8 @@ public class TPCommand implements CommandExecutor {
         	y = Integer.valueOf(args[1]);
         	z = Integer.valueOf(args[2]);
         	player.teleport(new Location(player.getWorld(), x, y, z));
+        	player.sendMessage("Teleported to " + x + " " + y + " " + z + ".");
+        	return true;
         } catch (Exception e) { }
 
         List<Player> targets = Bukkit.matchPlayer(args[0]);
