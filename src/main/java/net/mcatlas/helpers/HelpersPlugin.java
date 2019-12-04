@@ -46,7 +46,7 @@ public class HelpersPlugin extends JavaPlugin implements Listener {
 
     @Override
     public void onDisable() {
-    	this.plugin = null;
+    	plugin = null;
     }
 
     @EventHandler

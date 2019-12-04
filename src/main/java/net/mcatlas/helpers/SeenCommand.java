@@ -25,8 +25,10 @@ public class SeenCommand implements CommandExecutor {
         }
 
         if (target.isOnline()) {
-        	
-            sender.sendMessage(ChatColor.GREEN + target.getName() + " is online.");
+        	long loggedOn = HelpersPlugin.get().getTimeOnline(target.getPlayer());
+        	long timeOnline = System.currentTimeMillis() - loggedOn;
+        	String timeOnlineString = DurationFormatUtils.formatDurationWords(timeOnline, true, true);
+            sender.sendMessage(ChatColor.GREEN + target.getName() + " has been online for " + timeOnlineString);
             return true;
         }
 

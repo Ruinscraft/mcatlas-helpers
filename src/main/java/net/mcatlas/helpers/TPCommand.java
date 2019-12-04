@@ -38,6 +38,14 @@ public class TPCommand implements CommandExecutor {
             return true;
         }
 
+        int x, y, z;
+        try {
+        	x = Integer.valueOf(args[0]);
+        	y = Integer.valueOf(args[1]);
+        	z = Integer.valueOf(args[2]);
+        	player.teleport(new Location(player.getWorld(), x, y, z));
+        } catch (Exception e) { }
+
         List<Player> targets = Bukkit.matchPlayer(args[0]);
 
         if (targets.isEmpty()) {
