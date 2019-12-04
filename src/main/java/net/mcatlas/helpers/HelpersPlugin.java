@@ -1,6 +1,7 @@
 package net.mcatlas.helpers;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -8,7 +9,9 @@ import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -16,6 +19,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class HelpersPlugin extends JavaPlugin implements Listener {
 
 	public Map<UUID, Long> players;
+	public Set<UUID> recentDeaths;
 
 	public static HelpersPlugin plugin;
 
@@ -91,6 +95,19 @@ public class HelpersPlugin extends JavaPlugin implements Listener {
     public void onQuit(PlayerQuitEvent event) {
         event.setQuitMessage(null);
         this.players.remove(event.getPlayer().getUniqueId());
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onDeath(PlayerDeathEvent event) {
+    	UUID playerUUID = event.getEntity().getUniqueId();
+    	if (this.recentDeaths.contains(playerUUID)) {
+    		event.setDeathMessage(null);
+    		return;
+    	}
+    	this.recentDeaths.add(playerUUID);
+    	this.getServer().getScheduler().scheduleSyncDelayedTask(this, () -> {
+    		this.recentDeaths.remove(playerUUID);
+    	}, 20 * 90);
     }
 
     public long getTimeOnline(Player player) {
