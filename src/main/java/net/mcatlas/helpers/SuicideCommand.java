@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 public class SuicideCommand implements CommandExecutor {
 
     private static final Map<UUID, Long> recent = new HashMap<>();
-    private static final long WAIT_TIME = TimeUnit.MINUTES.toMillis(3);
+    private static final long WAIT_TIME = TimeUnit.SECONDS.toMillis(30);
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
