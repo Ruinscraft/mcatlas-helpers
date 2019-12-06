@@ -32,6 +32,8 @@ public class HelpersPlugin extends JavaPlugin implements Listener {
     @Override
     public void onEnable() {
     	plugin = this;
+
+    	saveDefaultConfig();
     	
     	this.players = new HashMap<UUID, Long>();
     	for (Player player : Bukkit.getOnlinePlayers()) {
