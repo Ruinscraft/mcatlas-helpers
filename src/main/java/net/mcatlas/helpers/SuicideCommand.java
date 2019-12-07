@@ -22,6 +22,11 @@ public class SuicideCommand implements CommandExecutor {
             return true;
         }
 
+        if (args.length > 0) {
+            sender.sendMessage(ChatColor.RED + "This command cannot be used to kill other players.");
+            return true;
+        }
+
         Player player = (Player) sender;
 
         if (recent.containsKey(player.getUniqueId())) {
