@@ -7,6 +7,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 public class SeenCommand implements CommandExecutor {
 
@@ -25,11 +26,17 @@ public class SeenCommand implements CommandExecutor {
         }
 
         if (target.isOnline()) {
-        	long loggedOn = HelpersPlugin.get().getTimeOnline(target.getPlayer());
-        	long timeOnline = System.currentTimeMillis() - loggedOn;
-        	String timeOnlineString = DurationFormatUtils.formatDurationWords(timeOnline, true, true);
-            sender.sendMessage(ChatColor.GREEN + target.getName() + " has been online for " + timeOnlineString);
-            return true;
+        	Player player = (Player) target;
+        	if (sender instanceof Player) {
+        		Player playerSender = (Player) sender;
+        		if (playerSender.canSee(player)) {
+        			sendSeenWithTimeOnline(sender, target);
+        			return true;
+        		}
+        	} else {
+        		sendSeenWithTimeOnline(sender, target);
+        		return true;
+        	}
         }
 
         long durationSinceSeen = System.currentTimeMillis() - target.getLastPlayed();
@@ -37,6 +44,13 @@ public class SeenCommand implements CommandExecutor {
         sender.sendMessage(ChatColor.YELLOW + target.getName() + " was last seen " + DurationFormatUtils.formatDurationWords(durationSinceSeen, true, true) + " ago.");
 
         return true;
+    }
+
+    public void sendSeenWithTimeOnline(CommandSender sender, OfflinePlayer target) {
+    	long loggedOn = HelpersPlugin.get().getTimeOnline(target.getPlayer());
+    	long timeOnline = System.currentTimeMillis() - loggedOn;
+    	String timeOnlineString = DurationFormatUtils.formatDurationWords(timeOnline, true, true);
+        sender.sendMessage(ChatColor.GREEN + target.getName() + " has been online for " + timeOnlineString);
     }
 
 }
