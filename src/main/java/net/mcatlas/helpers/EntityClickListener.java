@@ -20,6 +20,7 @@ public class EntityClickListener implements Listener {
 			Tameable tamed = (Tameable) entity;
 			if (!tamed.isTamed()) return;
 			if (tamed.getOwner().equals(player)) return;
+			if (!player.hasPermission("mcatlas.tamedowner")) return;
 			player.sendMessage(ChatColor.GREEN + "The owner of this creature is " 
 					+ ChatColor.GOLD + tamed.getOwner());
 		}

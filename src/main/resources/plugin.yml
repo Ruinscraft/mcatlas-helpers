@@ -10,7 +10,7 @@ commands:
   map:
   seen:
   near:
-    aliases: [nearby]
+    aliases: [nearby, nearme]
   help:
     aliases: [helpme, wiki, website, tutorial]
   uptime:
@@ -28,3 +28,7 @@ commands:
     permission: mcatlas.command.speed
   entitycount:
     permission: mcatlas.command.entitycount
+permissions:
+  mcatlas.tamedowner:
+    default: op
+    description: Right click a creature to see the owner
