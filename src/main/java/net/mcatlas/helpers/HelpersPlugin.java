@@ -42,6 +42,7 @@ public class HelpersPlugin extends JavaPlugin implements Listener {
     	this.recentDeaths = new HashSet<UUID>();
 
         getServer().getPluginManager().registerEvents(this, this);
+        getServer().getPluginManager().registerEvents(new EntityClickListener(), this);
         getServer().getPluginManager().registerEvents(new BedListener(), this);
         getCommand("vote").setExecutor(new VoteCommand());
         getCommand("rules").setExecutor(new RulesCommand());
