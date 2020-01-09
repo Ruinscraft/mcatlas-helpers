@@ -96,9 +96,7 @@ public class HelpersPlugin extends JavaPlugin implements Listener {
         player.sendMessage("");
         player.sendMessage(ChatColor.YELLOW + "https://mcatlas.net/");
         player.sendMessage("");
-        player.sendMessage(ChatColor.LIGHT_PURPLE + "The 2019 Year In Review Contest is underway! " + 
-        		" Vote on categories like best builds, most active, most generous nation, and more! Click here:");
-        player.sendMessage(ChatColor.YELLOW + "https://t.co/TqXl8Yz4Jx");
+        player.sendMessage("");
         player.sendMessage("");
 
         this.players.put(player.getUniqueId(), System.currentTimeMillis());
