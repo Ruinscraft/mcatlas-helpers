@@ -42,6 +42,7 @@ public class NearCommand implements CommandExecutor {
 
     	for (Player player : firstPlayer.getWorld().getPlayers()) {
     		if (player.equals(firstPlayer)) continue;
+    		if (!firstPlayer.canSee(player)) continue;
     		int playerDistance = (int) player.getLocation().distance(firstPlayer.getLocation());
     		if (player.getLocation().distance(firstPlayer.getLocation()) <= maxDistance) {
     			map.put(player, (int) playerDistance);
