@@ -14,7 +14,6 @@ commands:
   help:
     aliases: [helpme, wiki, website, tutorial]
   uptime:
-    aliases: [gc]
   suicide:
     aliases: [killme] # I purposely did not use /kill for this one
   fly:
@@ -26,6 +25,8 @@ commands:
     permission: mcatlas.command.tp
   speed:
     permission: mcatlas.command.speed
+  gc:
+    permission: mcatlas.command.gc
   entitycount:
     permission: mcatlas.command.entitycount
 permissions:

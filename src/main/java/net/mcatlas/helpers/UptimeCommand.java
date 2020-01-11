@@ -8,15 +8,9 @@ import org.bukkit.command.CommandSender;
 
 public class UptimeCommand implements CommandExecutor {
 
-    private static final long STARTUP_TIME;
-
-    static {
-        STARTUP_TIME = System.currentTimeMillis();
-    }
-
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        long diff = System.currentTimeMillis() - STARTUP_TIME;
+        long diff = System.currentTimeMillis() - HelpersPlugin.get().STARTUP_TIME;
 
         sender.sendMessage(ChatColor.YELLOW + "The server has been up for " + DurationFormatUtils.formatDurationWords(diff, true, true));
 

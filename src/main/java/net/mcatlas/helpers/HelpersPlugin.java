@@ -2,6 +2,7 @@ package net.mcatlas.helpers;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -23,11 +24,22 @@ public class HelpersPlugin extends JavaPlugin implements Listener {
 	public Map<UUID, Long> players;
 	public Set<UUID> recentDeaths;
 
+    // tps stuff
+    private transient long lastPoll = System.nanoTime();
+    private final LinkedList<Double> history = new LinkedList<>();
+    private final long tickInterval = 50;
+
 	public static HelpersPlugin plugin;
 
 	public static HelpersPlugin get() {
 		return plugin;
 	}
+
+    public static final long STARTUP_TIME;
+
+    static {
+    	STARTUP_TIME = System.currentTimeMillis();
+    }
 
     @Override
     public void onEnable() {
@@ -55,9 +67,51 @@ public class HelpersPlugin extends JavaPlugin implements Listener {
         getCommand("fly").setExecutor(new FlyCommand());
         getCommand("broadcast").setExecutor(new BroadcastCommand());
         getCommand("tp").setExecutor(new TPCommand());
+        getCommand("gc").setExecutor(new GCCommand());
         getCommand("speed").setExecutor(new SpeedCommand());
         getCommand("entitycount").setExecutor(new EntityCountCommand());
         getCommand("near").setExecutor(new NearCommand());
+
+        // tps stuff
+        history.add(20D);
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> {
+        	final long startTime = System.nanoTime();
+            long timeSpent = (startTime - lastPoll) / 1000;
+            if (timeSpent == 0) {
+                timeSpent = 1;
+            }
+            if (history.size() > 10) {
+                history.remove();
+            }
+            double tps = tickInterval * 1000000.0 / timeSpent;
+            if (tps <= 21) {
+                history.add(tps);
+            }
+            lastPoll = startTime;
+
+            long memory = getFreeMemory();
+            if (memory < 400) {
+            	this.getLogger().warning(ChatColor.YELLOW + "Memory at " + memory + " MB!");
+            }
+        }, 1000, 50);
+    }
+
+    public double getAverageTPS() {
+        double avg = 0;
+        for (Double f : history) {
+            if (f != null) {
+                avg += f;
+            }
+        }
+        return avg / history.size();
+    }
+
+    public long getAllocatedMemory() {
+    	return Runtime.getRuntime().totalMemory() / 1024 / 1024;
+    }
+
+    public long getFreeMemory() {
+    	return Runtime.getRuntime().freeMemory() / 1024 / 1024;
     }
 
     @Override
