@@ -45,8 +45,10 @@ public class EntityListener implements Listener {
 	@EventHandler
 	public void onEntityDeath(EntityDeathEvent event) {
 		Player killer = event.getEntity().getKiller();
+		if (killer == null) return;
 		if (event.getEntity() instanceof Tameable) {
 			Tameable tamed = (Tameable) event.getEntity();
+			if (tamed == null || tamed.getOwner() == null) return;
 			Bukkit.getLogger().info(killer.getName() + " killed " 
 					+ tamed.getOwner().getName() + "'s " + tamed.getType().name());
 		}
