@@ -2,7 +2,6 @@ package net.mcatlas.helpers;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 
@@ -28,7 +27,6 @@ import org.bukkit.potion.PotionEffectType;
 
 public class EntityListener implements Listener {
 
-	private Random random = new Random();
 	private Set<UUID> recent = new HashSet<>();
 
 	@EventHandler
@@ -61,6 +59,7 @@ public class EntityListener implements Listener {
 		if (event == null || event.getEntity() == null) return;
 
 		if (event.getEntityType() == EntityType.ENDER_CRYSTAL) {
+			event.getEntity().remove();
 			event.setCancelled(true);
 		}
 	}
@@ -74,7 +73,7 @@ public class EntityListener implements Listener {
 
 		if (!(child instanceof Pig)) return;
 		Pig pig = (Pig) child;
-		if (chance(3)) {
+		if (HelpersPlugin.get().chance(3)) {
 			pig.setSaddle(true);
 			event.setExperience(event.getExperience() * 5);
 			if (event.getBreeder() == null || event.getBreeder().getType() != EntityType.PLAYER) return;
@@ -108,13 +107,13 @@ public class EntityListener implements Listener {
 			drops.add(new ItemStack(Material.INK_SAC, 15 * drops.size()));
 			return;
 		case SPIDER:
-			if (chance(50)) drops.add(new ItemStack(Material.COBWEB, 1));
+			if (HelpersPlugin.get().chance(50)) drops.add(new ItemStack(Material.COBWEB, 1));
 			return;
 		case SKELETON:
-			if (chance(50)) drops.add(new ItemStack(Material.COBWEB, 1));
+			if (HelpersPlugin.get().chance(50)) drops.add(new ItemStack(Material.COBWEB, 1));
 			return;
 		case TURTLE:
-			if (chance(5)) {
+			if (HelpersPlugin.get().chance(5)) {
 				drops.add(new ItemStack(Material.HEART_OF_THE_SEA, 1));
 			}
 			return;
@@ -127,23 +126,18 @@ public class EntityListener implements Listener {
 			}
 			return;
 		case ZOMBIE:
-			if (chance(10)) drops.add(new ItemStack(Material.SLIME_BALL, 1));
-			if (chance(4)) drops.add(new ItemStack(Material.BEETROOT_SEEDS, 2));
+			if (HelpersPlugin.get().chance(10)) drops.add(new ItemStack(Material.SLIME_BALL, 1));
+			if (HelpersPlugin.get().chance(4)) drops.add(new ItemStack(Material.BEETROOT_SEEDS, 2));
 			return;
 		case ENDERMAN:
-			if (chance(33)) drops.add(new ItemStack(Material.PHANTOM_MEMBRANE, 1));
+			if (HelpersPlugin.get().chance(33)) drops.add(new ItemStack(Material.PHANTOM_MEMBRANE, 1));
 			return;
 		case PIG_ZOMBIE:
-			if (chance(20)) drops.add(new ItemStack(Material.BLAZE_ROD, 1));
+			if (HelpersPlugin.get().chance(20)) drops.add(new ItemStack(Material.BLAZE_ROD, 1));
 			return;
 		default:
 			return;
 		}
-	}
-
-	// chance out of 100
-	private boolean chance(int outOf100) {
-		return random.nextInt(100) < outOf100; 
 	}
 
 }
