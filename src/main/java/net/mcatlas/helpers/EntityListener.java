@@ -19,15 +19,18 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityBreedEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 public class EntityListener implements Listener {
 
 	private Random random = new Random();
 	private Set<UUID> recent = new HashSet<>();
-	
+
 	@EventHandler
 	public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
 		if (event == null) return;
@@ -54,6 +57,15 @@ public class EntityListener implements Listener {
 	}
 
 	@EventHandler
+	public void onEntityDamage(EntityDamageEvent event) {
+		if (event == null || event.getEntity() == null) return;
+
+		if (event.getEntityType() == EntityType.ENDER_CRYSTAL) {
+			event.setCancelled(true);
+		}
+	}
+
+	@EventHandler
 	public void onEntityBreed(EntityBreedEvent event) {
 		LivingEntity child = event.getEntity();
 
@@ -66,6 +78,7 @@ public class EntityListener implements Listener {
 			pig.setSaddle(true);
 			event.setExperience(event.getExperience() * 5);
 			if (event.getBreeder() == null || event.getBreeder().getType() != EntityType.PLAYER) return;
+			event.getEntity().addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20 * 30, 1));
 			event.getBreeder().sendMessage(ChatColor.YELLOW + "A pig who was born to fly was born!");
 			return;
 		}
@@ -108,8 +121,8 @@ public class EntityListener implements Listener {
 		case GHAST:
 			if (drops.size() == 0) return;
 
-			// multiply by 3
-			for (int i = 0; i < 3; i++) {
+			// multiply by 5
+			for (int i = 0; i < 5; i++) {
 				drops.addAll(drops);
 			}
 			return;
@@ -119,6 +132,9 @@ public class EntityListener implements Listener {
 			return;
 		case ENDERMAN:
 			if (chance(33)) drops.add(new ItemStack(Material.PHANTOM_MEMBRANE, 1));
+			return;
+		case PIG_ZOMBIE:
+			if (chance(20)) drops.add(new ItemStack(Material.BLAZE_ROD, 1));
 			return;
 		default:
 			return;

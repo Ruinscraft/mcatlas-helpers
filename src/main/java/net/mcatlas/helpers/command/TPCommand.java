@@ -1,4 +1,4 @@
-package net.mcatlas.helpers;
+package net.mcatlas.helpers.command;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

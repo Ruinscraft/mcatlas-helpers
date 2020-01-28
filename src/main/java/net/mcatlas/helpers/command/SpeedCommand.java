@@ -1,4 +1,4 @@
-package net.mcatlas.helpers;
+package net.mcatlas.helpers.command;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

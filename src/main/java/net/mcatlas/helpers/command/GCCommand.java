@@ -1,10 +1,12 @@
-package net.mcatlas.helpers;
+package net.mcatlas.helpers.command;
 
 import org.apache.commons.lang.time.DurationFormatUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+
+import net.mcatlas.helpers.HelpersPlugin;
 
 // much of this code is from EssentialsX!
 public class GCCommand implements CommandExecutor {

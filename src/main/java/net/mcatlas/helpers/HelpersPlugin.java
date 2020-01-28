@@ -19,6 +19,21 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import net.mcatlas.helpers.command.BroadcastCommand;
+import net.mcatlas.helpers.command.EntityCountCommand;
+import net.mcatlas.helpers.command.FlyCommand;
+import net.mcatlas.helpers.command.GCCommand;
+import net.mcatlas.helpers.command.HelpCommand;
+import net.mcatlas.helpers.command.MapCommand;
+import net.mcatlas.helpers.command.NearCommand;
+import net.mcatlas.helpers.command.RulesCommand;
+import net.mcatlas.helpers.command.SeenCommand;
+import net.mcatlas.helpers.command.SpeedCommand;
+import net.mcatlas.helpers.command.SuicideCommand;
+import net.mcatlas.helpers.command.TPCommand;
+import net.mcatlas.helpers.command.UptimeCommand;
+import net.mcatlas.helpers.command.VoteCommand;
+
 public class HelpersPlugin extends JavaPlugin implements Listener {
 
 	public Map<UUID, Long> players;

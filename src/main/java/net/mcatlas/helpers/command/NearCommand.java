@@ -1,4 +1,4 @@
-package net.mcatlas.helpers;
+package net.mcatlas.helpers.command;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,3 +1,12 @@
 clientId: 'id'
 clientSecret: 'secretkey'
 updatedDate: 20191205
+storage:
+  mysql:
+    use: false
+    host: localhost
+    port: 3306
+    database: geonames
+    table: geoName
+    username: root
+    password: password

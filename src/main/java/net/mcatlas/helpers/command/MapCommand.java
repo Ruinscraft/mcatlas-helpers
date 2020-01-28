@@ -1,4 +1,4 @@
-package net.mcatlas.helpers;
+package net.mcatlas.helpers.command;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,6 +23,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+
+import net.mcatlas.helpers.HelpersPlugin;
 
 public class MapCommand implements CommandExecutor {
 
