@@ -17,6 +17,7 @@ public class BlockListener implements Listener {
 
 		if (event.isDropItems()) {
 			Block block = event.getBlock();
+			if (!block.getBiome().name().contains("OCEAN")) return;
 			if (block.getY() > 52) return;
 			Block aboveBlock = block.getWorld().getBlockAt(block.getLocation().clone().add(0, 1, 0));
 			if (aboveBlock == null) return;

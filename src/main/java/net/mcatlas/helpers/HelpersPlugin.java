@@ -24,6 +24,7 @@ import net.mcatlas.helpers.command.BroadcastCommand;
 import net.mcatlas.helpers.command.EntityCountCommand;
 import net.mcatlas.helpers.command.FlyCommand;
 import net.mcatlas.helpers.command.GCCommand;
+import net.mcatlas.helpers.command.GotoCommand;
 import net.mcatlas.helpers.command.HelpCommand;
 import net.mcatlas.helpers.command.MapCommand;
 import net.mcatlas.helpers.command.NearCommand;
@@ -34,6 +35,8 @@ import net.mcatlas.helpers.command.SuicideCommand;
 import net.mcatlas.helpers.command.TPCommand;
 import net.mcatlas.helpers.command.UptimeCommand;
 import net.mcatlas.helpers.command.VoteCommand;
+import net.mcatlas.helpers.geonames.GotoTabCompletion;
+import net.mcatlas.helpers.geonames.MySQLStorage;
 
 public class HelpersPlugin extends JavaPlugin implements Listener {
 
@@ -46,6 +49,9 @@ public class HelpersPlugin extends JavaPlugin implements Listener {
 	private final long tickInterval = 50;
 
 	private Random random = new Random();
+
+	private MySQLStorage storage = null;
+	private double scaling = 120;
 
 	public static HelpersPlugin plugin;
 
@@ -65,6 +71,19 @@ public class HelpersPlugin extends JavaPlugin implements Listener {
 
 		saveDefaultConfig();
 
+		this.scaling = getConfig().getInt("scaling", 120);
+
+		if (getConfig().getBoolean("storage.mysql.use")) {
+			String host = getConfig().getString("storage.mysql.host");
+			int port = getConfig().getInt("storage.mysql.port");
+			String database = getConfig().getString("storage.mysql.database");
+			String table = getConfig().getString("storage.mysql.table");
+			String username = getConfig().getString("storage.mysql.username");
+			String password = getConfig().getString("storage.mysql.password");
+			this.storage = new MySQLStorage(host, port, database, table, username, password);
+			this.getLogger().info("MySQL enabled!");
+		}
+
 		this.players = new HashMap<UUID, Long>();
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			this.players.put(player.getUniqueId(), System.currentTimeMillis());
@@ -76,11 +95,13 @@ public class HelpersPlugin extends JavaPlugin implements Listener {
 		getServer().getPluginManager().registerEvents(new BlockListener(), this);
 		getServer().getPluginManager().registerEvents(new BedListener(), this);
 		getServer().getPluginManager().registerEvents(new BoatExploitFix(), this);
+		getServer().getPluginManager().registerEvents(new GotoTabCompletion(), this);
 		getCommand("vote").setExecutor(new VoteCommand());
 		getCommand("rules").setExecutor(new RulesCommand());
 		getCommand("map").setExecutor(new MapCommand());
 		getCommand("seen").setExecutor(new SeenCommand());
 		getCommand("help").setExecutor(new HelpCommand());
+		getCommand("goto").setExecutor(new GotoCommand());
 		getCommand("uptime").setExecutor(new UptimeCommand());
 		getCommand("suicide").setExecutor(new SuicideCommand());
 		getCommand("fly").setExecutor(new FlyCommand());
@@ -131,6 +152,14 @@ public class HelpersPlugin extends JavaPlugin implements Listener {
 
 	public long getFreeMemory() {
 		return Runtime.getRuntime().freeMemory() / 1024 / 1024;
+	}
+
+	public MySQLStorage getStorage() {
+		return this.storage;
+	}
+
+	public boolean hasStorage() {
+		return this.storage != null;
 	}
 
 	@Override
@@ -202,6 +231,32 @@ public class HelpersPlugin extends JavaPlugin implements Listener {
 	// chance out of 100
 	public boolean chance(int outOf100) {
 		return random.nextInt(100) < outOf100; 
+	}
+
+	public class Coordinate {
+		int x; // long
+		int y; // lat
+
+		public Coordinate(int x, int y) {
+			this.x = x;
+			this.y = y;
+		}
+
+		public int getX() { return x; };
+		public int getY() { return y; };
+	}
+
+	// returns real life coordinate!!
+	public Coordinate getLifeFromMC(int mcX, int mcY) {
+		int x = (int) (mcX / scaling);
+		int y = (int) (mcY / scaling) * -1;
+		return new Coordinate(x, y);
+	}
+
+	public Coordinate getMCFromLife(double lat, double lon) {
+		int x = (int) (lon * scaling);
+		int y = (int) (lat * scaling) * -1;
+		return new Coordinate(x, y);
 	}
 
 }

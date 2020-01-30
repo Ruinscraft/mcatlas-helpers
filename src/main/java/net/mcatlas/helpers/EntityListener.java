@@ -18,8 +18,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityBreedEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -55,11 +55,10 @@ public class EntityListener implements Listener {
 	}
 
 	@EventHandler
-	public void onEntityDamage(EntityDamageEvent event) {
+	public void onEntityExplode(EntityExplodeEvent event) {
 		if (event == null || event.getEntity() == null) return;
 
 		if (event.getEntityType() == EntityType.ENDER_CRYSTAL) {
-			event.getEntity().remove();
 			event.setCancelled(true);
 		}
 	}

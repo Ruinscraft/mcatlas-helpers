@@ -27,6 +27,8 @@ commands:
     permission: mcatlas.command.speed
   gc:
     permission: mcatlas.command.gc
+  goto:
+    permission: mcatlas.command.goto
   entitycount:
     permission: mcatlas.command.entitycount
 permissions:
