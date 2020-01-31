@@ -131,27 +131,34 @@ public class Destination implements Comparable<Destination> {
 	}
 
 	public int popularityIndex() {
-		int popular = this.population + (10000 * this.getAltNames().size());
-		if (this.getFCode().equals("ADM1") || this.getFCode().equals("ADM2") || // admin district (counties, states, etc)
-				this.getFCode().equals("ADM3") || this.getFCode().equals("ADM4") ||
-				this.getFCode().equals("ADM5") || this.getFCode().equals("ADMD")) {
-			popular = popular - this.population;
-		} else if (this.getFCode().equals("MT")) { // mountain
-			popular = popular * 2;
-		} else if (this.getFCode().equals("PCLI")) { // actual country
-			popular = popular - this.population;
-			popular = popular / 2;
-		} else if (this.getFCode().equals("UNIV")) { // university
-			popular = popular / 2;
-		} else if (this.getFCode().equals("RGNE") || this.getFCode().equals("RGN")) { // region
-			popular = popular - this.population;
-		} else if (this.getFCode().equals("PPLX")) { // populated section
-			popular = popular / 3;
-		}
+		int popular = this.population + (4000 * this.getAltNames().size());
 		if (this.getCountry() == null) {
 			popular = popular / 2;
 		} else if (this.getCountry().equals("USA") || this.getCountry().equals("Canada")) {
 			popular = popular * 2;
+		}
+		if (this.getFCode().equals("ADM1") || this.getFCode().equals("ADM2") || // admin district (counties, states, etc)
+				this.getFCode().equals("ADM3") || this.getFCode().equals("ADM4") ||
+				this.getFCode().equals("ADM5") || this.getFCode().equals("ADMD") ||
+				this.getFCode().equals("CONT")) {
+			popular = popular - this.population;
+			popular = popular / 10;
+		} else if (this.getFCode().equals("MT")) { // mountain
+			popular = popular * 2;
+		} else if (this.getFCode().equals("PCLI")) { // actual country
+			popular = popular - this.population;
+			popular = popular / 5;
+		} else if (this.getFCode().equals("UNIV")) { // university
+			popular = popular / 2;
+		} else if (this.getFCode().equals("RGNE") || this.getFCode().equals("RGN")) { // region
+			popular = popular - this.population;
+			popular = popular / 3;
+		} else if (this.getFCode().equals("PPLX")) { // populated section
+			popular = popular / 4;
+		} else if (this.getFCode().equals("TMPL")) {
+			popular = popular * 2;
+		} else if (this.getFCode().equals("STM")) {
+			popular = popular / 4;
 		}
 		return popular;
 	}

@@ -33,40 +33,45 @@ public class MapCommand implements CommandExecutor {
 	private static final int TIME_BETWEEN_USE = 15;
 	private boolean apiOffline;
 
-    @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        String address = null;
+	@Override
+	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+		String address = null;
 
-        if (sender instanceof Player) {
-    		Player player = (Player) sender;
+		if (!(sender instanceof Player)) return false;
+		Player player = (Player) sender;
 
-    		if (canFindLocation(player)) {
-    			recentFourSquareAPIUsers.add(player.getUniqueId());
-            	HelpersPlugin.get().getServer().getScheduler().scheduleSyncDelayedTask(HelpersPlugin.get(), () -> {
-            		recentFourSquareAPIUsers.remove(player.getUniqueId());
-            	}, 20 * TIME_BETWEEN_USE);
-        		
-        		double x = player.getLocation().getX();
-        		double z = player.getLocation().getZ();
+		double x = player.getLocation().getX();
+		double z = player.getLocation().getZ();
 
-        		address = getAddress(x, z, false);
-    		}
-    	}
+		if (canFindLocation(player)) {
+			recentFourSquareAPIUsers.add(player.getUniqueId());
+			HelpersPlugin.get().getServer().getScheduler().scheduleSyncDelayedTask(HelpersPlugin.get(), () -> {
+				recentFourSquareAPIUsers.remove(player.getUniqueId());
+			}, 20 * TIME_BETWEEN_USE);
 
-        sender.sendMessage(ChatColor.GRAY + "Find the live map here: " + ChatColor.YELLOW + "https://mcatlas.net/map");
-        if (address != null) {
-        	sender.sendMessage(ChatColor.GRAY + "You're currently near " + address);
-        }
-        return true;
-    }
+			address = getAddress(x, z, false);
+		}
 
-    public boolean canFindLocation(Player player) {
+		if (address == null) {
+			if (HelpersPlugin.get().hasStorage()) {
+				// query nearby
+			}
+		}
+
+		sender.sendMessage(ChatColor.GRAY + "Find the live map here: " + ChatColor.YELLOW + "https://mcatlas.net/map");
+		if (address != null) {
+			sender.sendMessage(ChatColor.GRAY + "You're currently near " + address);
+		}
+		return true;
+	}
+
+	public boolean canFindLocation(Player player) {
 		UUID uuid = player.getUniqueId();
 
 		if (player.getWorld() != player.getServer().getWorlds().get(0)) return false;
 		if (recentFourSquareAPIUsers.contains(uuid)) return false;
 		if (recentFourSquareAPIUsers.size() > RECENT_MAX_SIZE) return false;
-		
+
 		if (player.isSwimming()) {
 			return false;
 		} else if (player.isInsideVehicle()) {
@@ -75,13 +80,13 @@ public class MapCommand implements CommandExecutor {
 				return false;
 			}
 		}
-		
-		return true;
-    }
 
-    public String getAddress(double x, double z, boolean largeRadius) {
-    	JsonObject rootObj = getLocationData(getRealLifeCoord(x, z), largeRadius);
-		
+		return true;
+	}
+
+	public String getAddress(double x, double z, boolean largeRadius) {
+		JsonObject rootObj = getLocationData(getRealLifeCoord(x, z), largeRadius);
+
 		JsonObject bestVenue = getBestVenue(rootObj, getRealLifeX(z), getRealLifeZ(x));
 		if (bestVenue == null && !largeRadius) {
 			return getAddress(x, z, true);
@@ -113,12 +118,12 @@ public class MapCommand implements CommandExecutor {
 			address = city + ", " + state + ", " + country;
 		}
 		return address;
-    }
+	}
 
-    public JsonObject getBestVenue(JsonObject rootObj, double xReal, double zReal) {
+	public JsonObject getBestVenue(JsonObject rootObj, double xReal, double zReal) {
 		JsonObject responseObj = rootObj.getAsJsonObject("response");
 		JsonArray venues = responseObj.getAsJsonArray("venues");
-		
+
 		if (venues.size() == 0) return null;
 
 		double nearest = Double.MAX_VALUE;
@@ -135,30 +140,30 @@ public class MapCommand implements CommandExecutor {
 			}
 		}
 		return bestVenue;
-    }
+	}
 
-    public double getRealLifeX(double z) {
-    	return z / -120;
-    }
+	public double getRealLifeX(double z) {
+		return z / -120;
+	}
 
-    public double getRealLifeZ(double x) {
-    	return x / 120;
-    }
+	public double getRealLifeZ(double x) {
+		return x / 120;
+	}
 
-    public String getRealLifeCoord(double x, double z) {
+	public String getRealLifeCoord(double x, double z) {
 		return getRealLifeX(z) + "," + getRealLifeZ(x);
-    }
+	}
 
-    public JsonObject getLocationData(Location location, boolean largeRadius) {
-    	return getLocationData(getRealLifeCoord(location.getX(), location.getZ()), largeRadius);
-    }
+	public JsonObject getLocationData(Location location, boolean largeRadius) {
+		return getLocationData(getRealLifeCoord(location.getX(), location.getZ()), largeRadius);
+	}
 
-    public JsonObject getLocationData(double xReal, double zReal, boolean largeRadius) {
-    	return getLocationData(xReal + ", " + zReal, largeRadius);
-    }
+	public JsonObject getLocationData(double xReal, double zReal, boolean largeRadius) {
+		return getLocationData(xReal + ", " + zReal, largeRadius);
+	}
 
-    public JsonObject getLocationData(String coord, boolean largeRadius) {
-    	String client_id = HelpersPlugin.get().getConfig().getString("clientId");
+	public JsonObject getLocationData(String coord, boolean largeRadius) {
+		String client_id = HelpersPlugin.get().getConfig().getString("clientId");
 		String client_secret = HelpersPlugin.get().getConfig().getString("clientSecret");
 		String updated_date = HelpersPlugin.get().getConfig().getString("updatedDate");
 		String link = "https://api.foursquare.com/v2/venues/search" + 
@@ -217,6 +222,6 @@ public class MapCommand implements CommandExecutor {
 		}
 
 		return root.getAsJsonObject();
-    }
+	}
 
 }

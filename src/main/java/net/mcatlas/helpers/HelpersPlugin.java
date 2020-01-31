@@ -20,6 +20,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import net.mcatlas.helpers.command.BorderCommand;
 import net.mcatlas.helpers.command.BroadcastCommand;
 import net.mcatlas.helpers.command.EntityCountCommand;
 import net.mcatlas.helpers.command.FlyCommand;
@@ -35,6 +36,7 @@ import net.mcatlas.helpers.command.SuicideCommand;
 import net.mcatlas.helpers.command.TPCommand;
 import net.mcatlas.helpers.command.UptimeCommand;
 import net.mcatlas.helpers.command.VoteCommand;
+import net.mcatlas.helpers.command.WhereAmICommand;
 import net.mcatlas.helpers.geonames.GotoTabCompletion;
 import net.mcatlas.helpers.geonames.MySQLStorage;
 
@@ -102,6 +104,8 @@ public class HelpersPlugin extends JavaPlugin implements Listener {
 		getCommand("seen").setExecutor(new SeenCommand());
 		getCommand("help").setExecutor(new HelpCommand());
 		getCommand("goto").setExecutor(new GotoCommand());
+		getCommand("whereami").setExecutor(new WhereAmICommand());
+		getCommand("border").setExecutor(new BorderCommand());
 		getCommand("uptime").setExecutor(new UptimeCommand());
 		getCommand("suicide").setExecutor(new SuicideCommand());
 		getCommand("fly").setExecutor(new FlyCommand());
@@ -228,28 +232,32 @@ public class HelpersPlugin extends JavaPlugin implements Listener {
 		return this.players.get(player.getUniqueId());
 	}
 
+	public double getScaling() {
+		return this.scaling;
+	}
+
 	// chance out of 100
 	public boolean chance(int outOf100) {
 		return random.nextInt(100) < outOf100; 
 	}
 
 	public class Coordinate {
-		int x; // long
-		int y; // lat
+		double x; // long
+		double y; // lat
 
-		public Coordinate(int x, int y) {
+		public Coordinate(double x, double y) {
 			this.x = x;
 			this.y = y;
 		}
 
-		public int getX() { return x; };
-		public int getY() { return y; };
+		public double getX() { return x; };
+		public double getY() { return y; };
 	}
 
 	// returns real life coordinate!!
 	public Coordinate getLifeFromMC(int mcX, int mcY) {
-		int x = (int) (mcX / scaling);
-		int y = (int) (mcY / scaling) * -1;
+		double x = mcX / scaling;
+		double y = mcY / scaling * -1;
 		return new Coordinate(x, y);
 	}
 

@@ -5,11 +5,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import com.zaxxer.hikari.HikariDataSource;
 
+import net.mcatlas.helpers.HelpersPlugin;
+import net.mcatlas.helpers.HelpersPlugin.Coordinate;
 import net.mcatlas.helpers.geonames.Destination.Builder;
 
 public class MySQLStorage {
@@ -17,11 +20,14 @@ public class MySQLStorage {
 	private HikariDataSource dataSource;
 
 	private String query_destination;
+	private String query_area;
 
 	public MySQLStorage(String host, int port,
 			String database, String geoTable, String username, String password) {
 		query_destination = "SELECT * FROM " + geoTable + " WHERE asciiname LIKE ? " + 
 			" AND admin1 LIKE ? AND country LIKE ?;";
+		query_area = "SELECT * FROM " + geoTable + " WHERE latitude < ? AND latitude > ? AND " +
+			"longitude < ? AND longitude > ?;";
 
 		dataSource = new HikariDataSource();
 
@@ -32,6 +38,67 @@ public class MySQLStorage {
 		dataSource.setMaximumPoolSize(3);
 		dataSource.setConnectionTimeout(3000);
 		dataSource.setLeakDetectionThreshold(3000);
+	}
+
+	// run async!!
+	// cycles a few times to check in a radius for nearby destinations
+	public List<Destination> getNearbyDestinations(int x, int z, int blockRange, final int amntSoFar) {
+		List<Destination> destinations = HelpersPlugin.get().getStorage().getNearby(x, z, blockRange);
+
+		System.out.println(amntSoFar);
+		if (amntSoFar >= 2) return destinations;
+		if (destinations.size() > 0) return destinations;
+
+		if (amntSoFar == 0) blockRange = 35;
+		if (amntSoFar == 1) blockRange = 200;
+
+		return getNearbyDestinations(x, z, blockRange, amntSoFar + 1);
+	}
+
+	public CompletableFuture<List<Destination>> getNearbyFuture(int x, int z, int blockRange) {
+		return CompletableFuture.supplyAsync(() -> {
+			return this.getNearby(x, z, blockRange);
+		});
+	}
+
+	public List<Destination> getNearby(int x, int z, int blockRange) {
+		Coordinate coord = HelpersPlugin.get().getLifeFromMC(-z, -x);
+		return getNearby(coord.getX(), coord.getY(), blockRange);
+	}
+
+	public List<Destination> getNearby(double lat, double lon, int blockRange) {
+		List<Destination> destinations = new ArrayList<>();
+		double range = blockRange / HelpersPlugin.get().getScaling();
+
+		try (Connection c = getConnection();
+				PreparedStatement ps = c.prepareStatement(query_area)) {
+			ps.setDouble(1, lat + range);
+			ps.setDouble(2, lat - range);
+			ps.setDouble(3, lon + range);
+			ps.setDouble(4, lon - range);
+
+			try (ResultSet rs = ps.executeQuery()) {
+				while (rs.next()) {
+					String name = rs.getString("asciiname");
+					double locationLat = rs.getDouble("latitude");
+					double locationLon = rs.getDouble("longitude");
+
+					Destination.Builder builder = new Builder(name, locationLat, locationLon);
+					builder.alternateNames(
+							rs.getString("alternateNames")).fcode(rs.getString("fcode"))
+							.country(rs.getString("country")).adminZone(rs.getString("admin1"))
+							.population(rs.getInt("population")).timezone(rs.getString("timezone"));
+
+					Destination destination = builder.build();
+					destinations.add(destination);
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		Collections.sort(destinations);
+		return destinations;
 	}
 
 	public CompletableFuture<List<Destination>> getAutoCompleteFuture(String string) {
@@ -88,6 +155,7 @@ public class MySQLStorage {
 			e.printStackTrace();
 		}
 
+		Collections.sort(destinations);
 		return destinations;
 	}
 

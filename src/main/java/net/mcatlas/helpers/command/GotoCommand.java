@@ -1,7 +1,6 @@
 package net.mcatlas.helpers.command;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -54,13 +53,12 @@ public class GotoCommand implements CommandExecutor, TabCompleter {
 				return;
 			}
 
-			Collections.sort(destinations);
 			Destination best = destinations.get(0);
 			double lat = best.getLat();
 			double lon = best.getLong();
 			Coordinate coord = HelpersPlugin.get().getMCFromLife(lat, lon);
-			int x = coord.getX();
-			int z = coord.getY();
+			int x = (int) coord.getX();
+			int z = (int) coord.getY();
 			System.out.println(best.getFormattedName() + " " + x + " " + z);
 
 			Bukkit.getScheduler().runTask(HelpersPlugin.get(), () -> {

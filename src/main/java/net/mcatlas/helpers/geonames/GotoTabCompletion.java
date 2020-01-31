@@ -30,7 +30,7 @@ public class GotoTabCompletion implements Listener {
 
 		if (!(event.getSender() instanceof Player)) return;
 		Player player = (Player) event.getSender();
-		if (recents.containsKey(player)) {
+		if (recents.containsKey(player) && !event.getBuffer().endsWith(" ")) {
 			event.setCompletions(recents.get(player));
 			event.setHandled(true);
 			return;
@@ -102,7 +102,7 @@ public class GotoTabCompletion implements Listener {
 		this.recents.put(player, tabCompleters);
 		Bukkit.getScheduler().runTaskLater(HelpersPlugin.get(), () -> {
 			this.recents.remove(player);
-		}, 20 * 1);
+		}, 30);
 	}
 
 }

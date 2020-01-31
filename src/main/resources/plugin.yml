@@ -13,6 +13,8 @@ commands:
     aliases: [nearby, nearme]
   help:
     aliases: [helpme, wiki, website, tutorial]
+  border:
+    aliases: [netherborder]
   uptime:
   suicide:
     aliases: [killme] # I purposely did not use /kill for this one
@@ -29,6 +31,9 @@ commands:
     permission: mcatlas.command.gc
   goto:
     permission: mcatlas.command.goto
+  whereami:
+    aliases: [donde]
+    permission: mcatlas.command.whereami
   entitycount:
     permission: mcatlas.command.entitycount
 permissions:
