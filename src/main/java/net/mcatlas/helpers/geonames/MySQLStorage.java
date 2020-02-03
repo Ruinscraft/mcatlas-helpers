@@ -45,12 +45,11 @@ public class MySQLStorage {
 	public List<Destination> getNearbyDestinations(int x, int z, int blockRange, final int amntSoFar) {
 		List<Destination> destinations = HelpersPlugin.get().getStorage().getNearby(x, z, blockRange);
 
-		System.out.println(amntSoFar);
 		if (amntSoFar >= 2) return destinations;
 		if (destinations.size() > 0) return destinations;
 
 		if (amntSoFar == 0) blockRange = 35;
-		if (amntSoFar == 1) blockRange = 200;
+		if (amntSoFar == 1) blockRange = 250;
 
 		return getNearbyDestinations(x, z, blockRange, amntSoFar + 1);
 	}
@@ -114,7 +113,6 @@ public class MySQLStorage {
 		String admin1 = "";
 		String country = "";
 
-		string = string.replace("§r", "").replace("§a", "");
 		String[] locations = string.split(", ");
 
 		if (locations.length >= 1) {
@@ -127,12 +125,22 @@ public class MySQLStorage {
 		}
 		if (locations.length >= 3) {
 			country = locations[2];
+			country = country + "%";
 		}
 
 		try (Connection c = getConnection();
 				PreparedStatement ps = c.prepareStatement(query_destination)) {
-			ps.setString(1, asciiname + "%");
-			ps.setString(2, admin1 + "%");
+			if (locations.length == 1 && !string.endsWith(", ")) {
+				ps.setString(1, asciiname + "%");
+			} else {
+				ps.setString(1, asciiname);
+			}
+			if ((locations.length == 2 && !string.endsWith(", ")) ||
+					locations.length == 1) {
+				ps.setString(2, admin1 + "%");
+			} else {
+				ps.setString(2, admin1);
+			}
 			ps.setString(3, country + "%");
 
 			try (ResultSet rs = ps.executeQuery()) {

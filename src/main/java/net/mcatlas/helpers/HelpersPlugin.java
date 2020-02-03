@@ -29,6 +29,7 @@ import net.mcatlas.helpers.command.GotoCommand;
 import net.mcatlas.helpers.command.HelpCommand;
 import net.mcatlas.helpers.command.MapCommand;
 import net.mcatlas.helpers.command.NearCommand;
+import net.mcatlas.helpers.command.RenderDistanceCommand;
 import net.mcatlas.helpers.command.RulesCommand;
 import net.mcatlas.helpers.command.SeenCommand;
 import net.mcatlas.helpers.command.SpeedCommand;
@@ -106,6 +107,7 @@ public class HelpersPlugin extends JavaPlugin implements Listener {
 		getCommand("goto").setExecutor(new GotoCommand());
 		getCommand("whereami").setExecutor(new WhereAmICommand());
 		getCommand("border").setExecutor(new BorderCommand());
+		getCommand("renderdistance").setExecutor(new RenderDistanceCommand());
 		getCommand("uptime").setExecutor(new UptimeCommand());
 		getCommand("suicide").setExecutor(new SuicideCommand());
 		getCommand("fly").setExecutor(new FlyCommand());

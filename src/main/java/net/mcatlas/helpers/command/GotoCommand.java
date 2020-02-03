@@ -82,7 +82,7 @@ public class GotoCommand implements CommandExecutor, TabCompleter {
 		this.recents.add(player);
 		Bukkit.getScheduler().runTaskLater(HelpersPlugin.get(), () -> {
 			this.recents.remove(player);
-		}, 20 * 5);
+		}, 20 * 12); // 12 sec
 		return true;
 	}
 

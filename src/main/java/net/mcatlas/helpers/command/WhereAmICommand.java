@@ -49,11 +49,8 @@ public class WhereAmICommand implements CommandExecutor {
 
 		Bukkit.getScheduler().runTaskAsynchronously(HelpersPlugin.get(), () -> {
 			List<Destination> destinations = 
-					HelpersPlugin.get().getStorage().getNearbyDestinations(loc.clone().getBlockX(), loc.clone().getBlockZ(), 5, 0);
-			for (Destination dest : destinations) {
-				System.out.println(dest.getFormattedName() + ", f: " + dest.getFCode() + ", ind: " + dest.popularityIndex()
-						+ ", alt: " + dest.getAltNames().size() + ", pop: " + dest.getPopulation());
-			}
+					HelpersPlugin.get().getStorage()
+					.getNearbyDestinations(loc.clone().getBlockX(), loc.clone().getBlockZ(), 5, 0);
 
 			if (destinations.size() == 0) {
 				Bukkit.getScheduler().runTask(HelpersPlugin.get(), () -> {
@@ -71,7 +68,7 @@ public class WhereAmICommand implements CommandExecutor {
 		this.recents.add(player);
 		Bukkit.getScheduler().runTaskLater(HelpersPlugin.get(), () -> {
 			this.recents.remove(player);
-		}, 20 * 5);
+		}, 20 * 6);
 
 		return false;
 	}

@@ -89,7 +89,7 @@ public class GotoTabCompletion implements Listener {
 			}
 			if (cut) continue;
 
-			formatted = formatted.replace(firstArgs, "");
+			formatted = formatted.replaceFirst(firstArgs, "");
 
 			tabCompleters.add(formatted);
 
@@ -102,7 +102,7 @@ public class GotoTabCompletion implements Listener {
 		this.recents.put(player, tabCompleters);
 		Bukkit.getScheduler().runTaskLater(HelpersPlugin.get(), () -> {
 			this.recents.remove(player);
-		}, 30);
+		}, 20);
 	}
 
 }
