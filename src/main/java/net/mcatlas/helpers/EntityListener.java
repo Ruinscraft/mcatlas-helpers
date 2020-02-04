@@ -13,6 +13,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Pig;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Sheep;
 import org.bukkit.entity.Tameable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -21,6 +22,7 @@ import org.bukkit.event.entity.EntityBreedEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerShearEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -72,6 +74,7 @@ public class EntityListener implements Listener {
 
 		if (!(child instanceof Pig)) return;
 		Pig pig = (Pig) child;
+
 		if (HelpersPlugin.get().chance(3)) {
 			pig.setSaddle(true);
 			event.setExperience(event.getExperience() * 5);
@@ -79,6 +82,16 @@ public class EntityListener implements Listener {
 			event.getEntity().addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20 * 30, 1));
 			event.getBreeder().sendMessage(ChatColor.YELLOW + "A pig who was born to fly was born!");
 			return;
+		}
+	}
+
+	@EventHandler
+	public void onPlayerShearEntity(PlayerShearEntityEvent event) {
+		if (!(event.getEntity() instanceof Sheep)) return;
+		if (HelpersPlugin.get().chance(33)) {
+			event.getEntity().getWorld().dropItemNaturally(event.getEntity().getLocation(), new ItemStack(Material.STRING, 1));
+		} else if (HelpersPlugin.get().chance(33)) {
+			event.getEntity().getWorld().dropItemNaturally(event.getEntity().getLocation(), new ItemStack(Material.STRING, 2));
 		}
 	}
 
