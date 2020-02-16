@@ -179,14 +179,6 @@ public class HelpersPlugin extends JavaPlugin implements Listener {
 
 		final Player player = event.getPlayer();
 
-		if (player.hasPermission("group.vip1")) {
-			if (!player.hasPermission("group.sponsor")) {
-				// add to sponsor rank in mcatlas server context
-				Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
-						"lp user " + player.getName() + " parent set mcatlas-sponsor server=mcatlas");
-			}
-		}
-
 		getServer().getScheduler().runTaskLater(this, () -> {
 			player.playSound(player.getLocation(), Sound.BLOCK_BEACON_ACTIVATE, 2.0F, 0.2F);
 		}, 10);
@@ -219,7 +211,7 @@ public class HelpersPlugin extends JavaPlugin implements Listener {
 		this.players.remove(event.getPlayer().getUniqueId());
 	}
 
-	@EventHandler(priority = EventPriority.HIGH)
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onDeath(PlayerDeathEvent event) {
 		UUID playerUUID = event.getEntity().getUniqueId();
 		if (this.recentDeaths.contains(playerUUID)) {
