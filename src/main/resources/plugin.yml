@@ -15,8 +15,6 @@ commands:
     aliases: [helpme, wiki, website, tutorial]
   border:
     aliases: [netherborder]
-  hat:
-    aliases: [helmet]
   uptime:
   suicide:
     aliases: [killme] # I purposely did not use /kill for this one
@@ -39,6 +37,9 @@ commands:
   renderdistance:
     aliases: [rd]
     permission: mcatlas.command.renderdistance
+  hat:
+    aliases: [helmet]
+    permission: mcatlas.command.hat
   entitycount:
     permission: mcatlas.command.entitycount
 permissions:
