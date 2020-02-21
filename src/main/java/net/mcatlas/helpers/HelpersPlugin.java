@@ -1,5 +1,6 @@
 package net.mcatlas.helpers;
 
+import java.lang.management.ManagementFactory;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -66,7 +67,7 @@ public class HelpersPlugin extends JavaPlugin implements Listener {
 	public static final long STARTUP_TIME;
 
 	static {
-		STARTUP_TIME = System.currentTimeMillis();
+		STARTUP_TIME = ManagementFactory.getRuntimeMXBean().getStartTime();
 	}
 
 	@Override

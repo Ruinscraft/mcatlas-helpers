@@ -15,7 +15,6 @@ public class GCCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         long diff = System.currentTimeMillis() - HelpersPlugin.STARTUP_TIME;
 
-        sender.sendMessage(ChatColor.GOLD + "(Time online may be inaccurate)");
         sender.sendMessage(ChatColor.GOLD + "The server has been up for " + 
         		ChatColor.GREEN + DurationFormatUtils.formatDurationWords(diff, true, true));
 

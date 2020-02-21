@@ -57,12 +57,13 @@ public class GotoCommand implements CommandExecutor, TabCompleter {
 			double lat = best.getLat();
 			double lon = best.getLong();
 			Coordinate coord = HelpersPlugin.get().getMCFromLife(lat, lon);
-			int x = (int) coord.getX();
-			int z = (int) coord.getY();
+			double x = (int) coord.getX() + .5;
+			double z = (int) coord.getY() + .5;
 			System.out.println(best.getFormattedName() + " " + x + " " + z);
 
 			Bukkit.getScheduler().runTask(HelpersPlugin.get(), () -> {
-				Location teleportTo = new Location(player.getWorld(), x, player.getWorld().getHighestBlockYAt(x, z) + 1, z);
+				double y = player.getWorld().getHighestBlockYAt((int) (x - .5), (int) (z - .5)) + 1;
+				Location teleportTo = new Location(player.getWorld(), x, y, z);
 				if (teleportTo.getBlock().getBlockData().getMaterial() == Material.LAVA ||
 						teleportTo.getBlock().getBlockData().getMaterial() == Material.CACTUS) {
 					player.sendMessage(ChatColor.RED + "There is lava or cactus at this location! Too unsafe!");
@@ -72,7 +73,7 @@ public class GotoCommand implements CommandExecutor, TabCompleter {
 				player.sendMessage(ChatColor.YELLOW + "Teleporting in 3 seconds...");
 
 				Bukkit.getScheduler().runTaskLater(HelpersPlugin.get(), () -> {
-					player.teleportAsync(new Location(player.getWorld(), x, player.getWorld().getHighestBlockYAt(x, z) + 1, z));
+					player.teleportAsync(new Location(player.getWorld(), x, y, z));
 					player.sendMessage(ChatColor.YELLOW + "You've been teleported to " + 
 							ChatColor.GREEN + best.getFormattedName());
 				}, 20 * 3);
