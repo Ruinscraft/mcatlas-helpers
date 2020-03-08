@@ -12,10 +12,9 @@ public class UptimeCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        long diff = System.currentTimeMillis() - HelpersPlugin.get().STARTUP_TIME;
+        long diff = System.currentTimeMillis() - HelpersPlugin.STARTUP_TIME;
 
         sender.sendMessage(ChatColor.YELLOW + "The server has been up for " + DurationFormatUtils.formatDurationWords(diff, true, true));
-
 
         return true;
     }

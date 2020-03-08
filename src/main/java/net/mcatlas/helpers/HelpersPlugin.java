@@ -26,6 +26,9 @@ import net.mcatlas.helpers.command.BroadcastCommand;
 import net.mcatlas.helpers.command.EntityCountCommand;
 import net.mcatlas.helpers.command.FlyCommand;
 import net.mcatlas.helpers.command.GCCommand;
+import net.mcatlas.helpers.command.GMCreativeCommand;
+import net.mcatlas.helpers.command.GMSpectatorCommand;
+import net.mcatlas.helpers.command.GMSurvivalCommand;
 import net.mcatlas.helpers.command.GotoCommand;
 import net.mcatlas.helpers.command.HatCommand;
 import net.mcatlas.helpers.command.HelpCommand;
@@ -35,6 +38,7 @@ import net.mcatlas.helpers.command.RenderDistanceCommand;
 import net.mcatlas.helpers.command.RulesCommand;
 import net.mcatlas.helpers.command.SeenCommand;
 import net.mcatlas.helpers.command.SpeedCommand;
+import net.mcatlas.helpers.command.StoreCommand;
 import net.mcatlas.helpers.command.SuicideCommand;
 import net.mcatlas.helpers.command.TPCommand;
 import net.mcatlas.helpers.command.UptimeCommand;
@@ -120,6 +124,10 @@ public class HelpersPlugin extends JavaPlugin implements Listener {
 		getCommand("speed").setExecutor(new SpeedCommand());
 		getCommand("entitycount").setExecutor(new EntityCountCommand());
 		getCommand("near").setExecutor(new NearCommand());
+		getCommand("store").setExecutor(new StoreCommand());
+		getCommand("gmc").setExecutor(new GMCreativeCommand());
+		getCommand("gmsp").setExecutor(new GMSpectatorCommand());
+		getCommand("gms").setExecutor(new GMSurvivalCommand());
 
 		// tps stuff
 		history.add(20D);
@@ -203,9 +211,17 @@ public class HelpersPlugin extends JavaPlugin implements Listener {
 		player.sendMessage("");
 		player.sendMessage("");
 
-		if (player.hasPermission("mcatlas.command.renderdistance")) player.setViewDistance(16);
+		if (player.hasPermission("mcatlas.command.renderdistance")) player.setViewDistance(32);
 
 		this.players.put(player.getUniqueId(), System.currentTimeMillis());
+
+		if (player.hasPermission("group.vip1")) {
+			if (!player.hasPermission("group.sponsor") && !player.hasPermission("sponsor.not.redeemable")) {
+				// add to sponsor rank in mcatlas server context
+				Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
+						"lp user " + player.getName() + " parent set mcatlas-sponsor server=mcatlas");
+			}
+		}
 	}
 
 	@EventHandler

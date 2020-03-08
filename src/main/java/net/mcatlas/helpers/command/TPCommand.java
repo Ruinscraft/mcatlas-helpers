@@ -7,6 +7,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import net.md_5.bungee.api.ChatColor;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +27,7 @@ public class TPCommand implements CommandExecutor {
 
         if (label.toLowerCase().equals("back")) {
             if (lastLocations.get(player) == null) {
-                player.sendMessage("No last location");
+                player.sendMessage(ChatColor.RED + "No last location");
                 return true;
             }
 
@@ -34,7 +36,7 @@ public class TPCommand implements CommandExecutor {
         }
 
         if (args.length < 1) {
-            player.sendMessage("Specify a player");
+            player.sendMessage(ChatColor.RED + "Specify a player");
             return true;
         }
 
@@ -44,14 +46,14 @@ public class TPCommand implements CommandExecutor {
         	y = Integer.valueOf(args[1]);
         	z = Integer.valueOf(args[2]);
         	player.teleport(new Location(player.getWorld(), x, y, z));
-        	player.sendMessage("Teleported to " + x + " " + y + " " + z + ".");
+        	player.sendMessage(ChatColor.YELLOW + "Teleported to " + x + " " + y + " " + z + ".");
         	return true;
         } catch (Exception e) { }
 
         List<Player> targets = Bukkit.matchPlayer(args[0]);
 
         if (targets.isEmpty()) {
-            player.sendMessage(args[0] + " is not online");
+            player.sendMessage(ChatColor.RED + args[0] + " is not online");
             return true;
         }
 
@@ -65,6 +67,7 @@ public class TPCommand implements CommandExecutor {
         lastLocations.put(player, player.getLocation());
 
         player.teleport(target.getLocation());
+    	player.sendMessage(ChatColor.YELLOW + "Teleported to " + target.getName());
 
         return true;
     }

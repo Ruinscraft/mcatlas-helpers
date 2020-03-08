@@ -1,7 +1,7 @@
 name: ${name}
 version: ${project.version}
 main: ${mainClass}
-authors: [royalkingkb]
+authors: [royalkingkb, StupidDrew9]
 api-version: 1.13
 
 commands:
@@ -18,6 +18,17 @@ commands:
   uptime:
   suicide:
     aliases: [killme] # I purposely did not use /kill for this one
+  store:
+    alises: [donate, purchase, sponsor]
+  gmc:
+    aliases: [creative, cr]
+    permission: mcatlas.command.creative
+  gms:
+    aliases: [survival, surv]
+    permission: mcatlas.command.survival
+  gmsp:
+    aliases: [spectator, spec]
+    permission: mcatlas.command.spectator
   fly:
     permission: mcatlas.command.fly
   broadcast:
