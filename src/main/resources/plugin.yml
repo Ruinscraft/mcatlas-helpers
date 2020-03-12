@@ -13,6 +13,8 @@ commands:
     aliases: [nearby, nearme]
   help:
     aliases: [helpme, wiki, website, tutorial]
+  history:
+    aliases: [timeline]
   border:
     aliases: [netherborder]
   uptime:
