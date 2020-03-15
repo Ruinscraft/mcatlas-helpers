@@ -21,7 +21,7 @@ commands:
   suicide:
     aliases: [killme] # I purposely did not use /kill for this one
   store:
-    alises: [donate, purchase, sponsor]
+    aliases: [donate, purchase, sponsor]
   gmc:
     aliases: [creative, cr]
     permission: mcatlas.command.creative
