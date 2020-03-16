@@ -213,7 +213,7 @@ public class HelpersPlugin extends JavaPlugin implements Listener {
 		player.sendMessage("");
 		player.sendMessage("");
 
-		if (player.hasPermission("mcatlas.command.renderdistance")) player.setViewDistance(32);
+		if (player.hasPermission("mcatlas.command.renderdistance")) player.setViewDistance(16);
 
 		this.players.put(player.getUniqueId(), System.currentTimeMillis());
 
