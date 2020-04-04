@@ -11,7 +11,7 @@ public class Destination implements Comparable<Destination> {
 
 	private Set<String> alternateNames = new HashSet<String>();
 
-	private int population = 0;
+	private long population = 0;
 
 	private String fcode;
 	private String country;
@@ -24,7 +24,7 @@ public class Destination implements Comparable<Destination> {
 		private double latitude;
 		private double longitude;
 		private Set<String> alternateNames;
-		private int population;
+		private long population;
 		private String fcode;
 		private String country;
 		private String adminZone;
@@ -48,7 +48,7 @@ public class Destination implements Comparable<Destination> {
 			return this;
 		}
 
-		public Builder population(int pop) {
+		public Builder population(long pop) {
 			this.population = pop;
 			return this;
 		}
@@ -106,7 +106,7 @@ public class Destination implements Comparable<Destination> {
 		return alternateNames;
 	}
 
-	public int getPopulation() {
+	public long getPopulation() {
 		return population;
 	}
 
@@ -130,8 +130,8 @@ public class Destination implements Comparable<Destination> {
 		return getName() + ", " + getAdminZone() + ", " + getCountry();
 	}
 
-	public int popularityIndex() {
-		int popular = this.population + (4000 * this.getAltNames().size());
+	public long popularityIndex() {
+		long popular = this.population + (4000 * this.getAltNames().size());
 
 		if (this.getFCode().equals("ADM1") || this.getFCode().equals("ADM2") || // admin district (counties, states, etc)
 				this.getFCode().equals("ADM3") || this.getFCode().equals("ADM4") ||
@@ -179,8 +179,8 @@ public class Destination implements Comparable<Destination> {
 	@Override
 	public int compareTo(Destination other) {
 		// eventually incorporate alt names too
-		int popular = this.popularityIndex();
-		int otherPopular = other.popularityIndex();
+		long popular = this.popularityIndex();
+		long otherPopular = other.popularityIndex();
 		if (otherPopular > popular) {
 			return 1;
 		} else if (otherPopular == popular) {

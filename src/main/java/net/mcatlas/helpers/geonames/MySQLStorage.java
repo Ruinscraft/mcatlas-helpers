@@ -86,7 +86,7 @@ public class MySQLStorage {
 					builder.alternateNames(
 							rs.getString("alternateNames")).fcode(rs.getString("fcode"))
 							.country(rs.getString("country")).adminZone(rs.getString("admin1"))
-							.population(rs.getInt("population")).timezone(rs.getString("timezone"));
+							.population(rs.getLong("population")).timezone(rs.getString("timezone"));
 
 					Destination destination = builder.build();
 					destinations.add(destination);
