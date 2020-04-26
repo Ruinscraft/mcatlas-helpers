@@ -22,7 +22,7 @@ public class RenderDistanceCommand implements CommandExecutor {
 		Player player = (Player) sender;
 
 		if (args.length == 0) {
-			player.sendMessage(ChatColor.RED + "/renderdistance <1-16>");
+			player.sendMessage(ChatColor.RED + "/renderdistance <1-8>");
 			return false;
 		}
 
@@ -30,12 +30,12 @@ public class RenderDistanceCommand implements CommandExecutor {
 		try {
 			dist = Integer.valueOf(args[0]);
 		} catch (Exception e) {
-			player.sendMessage(ChatColor.RED + "Please enter a number between 1 and 16");
+			player.sendMessage(ChatColor.RED + "Please enter a number between 1 and 8");
 			return false;
 		}
 
-		if (dist > 16) {
-			player.sendMessage(ChatColor.RED + "Limit is 16!");
+		if (dist > 8) {
+			player.sendMessage(ChatColor.RED + "Limit is 8!");
 			return false;
 		}
 
