@@ -119,8 +119,6 @@ public class EntityListener implements Listener {
 			drops.add(new ItemStack(Material.INK_SAC, 15 * drops.size()));
 			return;
 		case SPIDER:
-			if (HelpersPlugin.get().chance(50)) drops.add(new ItemStack(Material.COBWEB, 1));
-			return;
 		case SKELETON:
 			if (HelpersPlugin.get().chance(50)) drops.add(new ItemStack(Material.COBWEB, 1));
 			return;
@@ -146,6 +144,9 @@ public class EntityListener implements Listener {
 			return;
 		case PIG_ZOMBIE:
 			if (HelpersPlugin.get().chance(20)) drops.add(new ItemStack(Material.BLAZE_ROD, 1));
+			return;
+		case WITHER:
+			Bukkit.broadcastMessage(ChatColor.GREEN + killer.getName() + " successfully killed the Wither!");
 			return;
 		default:
 			return;
