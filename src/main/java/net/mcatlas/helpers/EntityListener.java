@@ -19,6 +19,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityBreedEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
@@ -150,6 +151,17 @@ public class EntityListener implements Listener {
 			return;
 		default:
 			return;
+		}
+	}
+
+	@EventHandler(priority = EventPriority.HIGH)
+	public void onEntityDamage(EntityDamageEvent event) {
+		Entity entity = event.getEntity();
+		if (!(entity instanceof Player)) return;
+		int y = entity.getLocation().getBlockY();
+		if (y < 0) {
+			event.setCancelled(true);
+			// maybe a msg? or a teleport to somewhere else?
 		}
 	}
 
