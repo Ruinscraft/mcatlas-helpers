@@ -12,6 +12,9 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
+import org.bukkit.World;
+import org.bukkit.entity.ChestedHorse;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -153,6 +156,9 @@ public class HelpersPlugin extends JavaPlugin implements Listener {
 				this.getLogger().warning(ChatColor.YELLOW + "Memory at " + memory + " MB!");
 			}
 		}, 1000, 50);
+
+		// donkeys
+		runContainerCreaturesTimer();
 	}
 
 	public double getAverageTPS() {
@@ -184,6 +190,22 @@ public class HelpersPlugin extends JavaPlugin implements Listener {
 	@Override
 	public void onDisable() {
 		plugin = null;
+	}
+
+	// Removes donkeys / mules / llamas. This is hopefully temporary
+	public void runContainerCreaturesTimer() {
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> {
+			for (World world : Bukkit.getWorlds()) {
+				for (Entity entity : world.getLivingEntities()) {
+					if (entity instanceof ChestedHorse) {
+						this.getLogger().info("Removed chested horse at " +
+								entity.getLocation().getBlockX() + " " + entity.getLocation().getBlockY() +
+								" " + entity.getLocation().getBlockZ());
+						entity.remove();
+					}
+				}
+			}
+		}, 120, 80);
 	}
 
 	@EventHandler
