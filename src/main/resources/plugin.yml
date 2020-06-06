@@ -59,3 +59,6 @@ permissions:
   mcatlas.tamedowner:
     default: op
     description: Right click a creature to see the owner
+  mcatlas.command.tphere:
+    default: op
+    description: Use the /tphere command

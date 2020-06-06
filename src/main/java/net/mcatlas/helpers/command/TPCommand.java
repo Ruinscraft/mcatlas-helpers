@@ -59,7 +59,7 @@ public class TPCommand implements CommandExecutor {
 
         Player target = targets.get(0);
 
-        if (label.toLowerCase().equals("tphere")) {
+        if (label.toLowerCase().equals("tphere") && player.hasPermission("mcatlas.command.tphere")) {
             target.teleport(player.getLocation());
             return true;
         }
