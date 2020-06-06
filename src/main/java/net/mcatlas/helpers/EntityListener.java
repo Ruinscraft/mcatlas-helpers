@@ -7,6 +7,7 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -37,6 +38,15 @@ public class EntityListener implements Listener {
 		if (event == null) return;
 
 		Player player = event.getPlayer();
+		Entity entity = event.getRightClicked();
+
+		ItemStack mainItem = player.getActiveItem();
+		if (mainItem != null && mainItem.getType() == Material.NAME_TAG) {
+			String name = mainItem.getItemMeta().getDisplayName();
+			Location loc = player.getLocation();
+			Bukkit.getLogger().info(player.getName() + " named a creature \"" + name + "\" at " +
+					loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ());
+		}
 
 		if (!player.hasPermission("mcatlas.tamedowner")) return;
 
@@ -46,7 +56,6 @@ public class EntityListener implements Listener {
 			recent.remove(player.getUniqueId());
 		}, 20);
 
-		Entity entity = event.getRightClicked();
 		if (!player.getInventory().getItemInMainHand().getType().equals(Material.AIR)) return;
 		if (entity instanceof Tameable) {
 			Tameable tamed = (Tameable) entity;
