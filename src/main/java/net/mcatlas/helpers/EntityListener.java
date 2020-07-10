@@ -25,36 +25,56 @@ import java.util.UUID;
 
 public class EntityListener implements Listener {
 
-    private Set<UUID> recent = new HashSet<>();
+    private Set<UUID> recentEntityInteractions = new HashSet<>();
 
     @EventHandler
     public void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
-        if (event == null) return;
-
         Player player = event.getPlayer();
         Entity entity = event.getRightClicked();
 
+        if (!player.hasPermission("mcatlas.tamedowner")) {
+            return;
+        }
+
         ItemStack mainItem = player.getActiveItem();
-        if (mainItem != null && mainItem.getType() == Material.NAME_TAG) {
+
+        if (mainItem == null) {
+            return;
+        }
+
+        if (mainItem.getType() == Material.NAME_TAG) {
             String name = mainItem.getItemMeta().getDisplayName();
             Location loc = player.getLocation();
+
             Bukkit.getLogger().info(player.getName() + " named a creature \"" + name + "\" at " +
                     loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ());
         }
 
-        if (!player.hasPermission("mcatlas.tamedowner")) return;
+        if (recentEntityInteractions.contains(player.getUniqueId())) {
+            return;
+        } else {
+            recentEntityInteractions.add(player.getUniqueId());
 
-        if (recent.contains(player.getUniqueId())) return;
-        recent.add(player.getUniqueId());
-        Bukkit.getScheduler().runTaskLater(HelpersPlugin.get(), () -> {
-            recent.remove(player.getUniqueId());
-        }, 20);
+            Bukkit.getScheduler().runTaskLater(HelpersPlugin.get(), () -> {
+                recentEntityInteractions.remove(player.getUniqueId());
+            }, 20);
+        }
 
-        if (!player.getInventory().getItemInMainHand().getType().equals(Material.AIR)) return;
+        if (!player.getInventory().getItemInMainHand().getType().equals(Material.AIR)) {
+            return;
+        }
+
         if (entity instanceof Tameable) {
             Tameable tamed = (Tameable) entity;
-            if (!tamed.isTamed()) return;
-            if (tamed.getOwner().equals(player)) return;
+
+            if (!tamed.isTamed()) {
+                return;
+            }
+
+            if (tamed.getOwner().equals(player)) {
+                return;
+            }
+
             player.sendMessage(ChatColor.GREEN + "The owner of this creature is "
                     + ChatColor.GOLD + tamed.getOwner().getName());
         }
@@ -62,7 +82,9 @@ public class EntityListener implements Listener {
 
     @EventHandler
     public void onEntityExplode(EntityExplodeEvent event) {
-        if (event == null || event.getEntity() == null) return;
+        if (event.getEntity() == null) {
+            return;
+        }
 
         if (event.getEntityType() == EntityType.ENDER_CRYSTAL) {
             event.setCancelled(true);
@@ -74,24 +96,41 @@ public class EntityListener implements Listener {
         LivingEntity child = event.getEntity();
 
         // abortion??
-        if (child == null) return;
+        if (child == null) {
+            return;
+        }
 
-        if (!(child instanceof Pig)) return;
+        if (!(child instanceof Pig)) {
+            return;
+        }
+
         Pig pig = (Pig) child;
 
         if (HelpersPlugin.get().chance(3)) {
             pig.setSaddle(true);
+
             event.setExperience(event.getExperience() * 5);
-            if (event.getBreeder() == null || event.getBreeder().getType() != EntityType.PLAYER) return;
+
+            if (event.getBreeder() == null) {
+                return;
+            }
+
+            if (event.getBreeder().getType() != EntityType.PLAYER) {
+                return;
+            }
+
             event.getEntity().addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20 * 30, 1));
+
             event.getBreeder().sendMessage(ChatColor.YELLOW + "A pig who was born to fly was born!");
-            return;
         }
     }
 
     @EventHandler
     public void onPlayerShearEntity(PlayerShearEntityEvent event) {
-        if (!(event.getEntity() instanceof Sheep)) return;
+        if (!(event.getEntity() instanceof Sheep)) {
+            return;
+        }
+
         if (HelpersPlugin.get().chance(33)) {
             event.getEntity().getWorld().dropItemNaturally(event.getEntity().getLocation(), new ItemStack(Material.STRING, 1));
         } else if (HelpersPlugin.get().chance(33)) {
@@ -101,14 +140,27 @@ public class EntityListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onEntityDeath(EntityDeathEvent event) {
-        if (event == null || event.getEntity() == null) return;
+        if (event.getEntity() == null) {
+            return;
+        }
 
         Player killer = event.getEntity().getKiller();
-        if (killer == null) return;
+
+        if (killer == null) {
+            return; // there was no Player killer
+        }
 
         if (event.getEntity() instanceof Tameable) {
             Tameable tamed = (Tameable) event.getEntity();
-            if (tamed == null || tamed.getOwner() == null) return;
+
+            if (tamed == null) {
+                return;
+            }
+
+            if (tamed.getOwner() == null) {
+                return;
+            }
+
             Bukkit.getLogger().info(killer.getName() + " killed "
                     + tamed.getOwner().getName() + "'s " + tamed.getType().name());
         }
