@@ -172,7 +172,7 @@ public class EntityListener implements Listener {
         if (y < 0) {
             final Location respawnLocation;
 
-            if (player.getBedLocation() != null) {
+            if (player.getBedSpawnLocation() != null) {
                 respawnLocation = player.getBedSpawnLocation();
             } else {
                 respawnLocation = player.getLocation().getWorld().getSpawnLocation();
