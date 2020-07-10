@@ -21,7 +21,7 @@ public class SeenCommand implements CommandExecutor {
 
         OfflinePlayer target = Bukkit.getOfflinePlayer(args[0]);
 
-        if (!target.hasPlayedBefore()) {
+        if (!target.hasPlayedBefore() && !target.isOnline()) {
             sender.sendMessage(ChatColor.RED + "Player has not played before.");
             return true;
         }

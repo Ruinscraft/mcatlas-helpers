@@ -1,8 +1,8 @@
 package net.mcatlas.helpers.geonames;
 
 import com.zaxxer.hikari.HikariDataSource;
+import net.mcatlas.helpers.Coordinate;
 import net.mcatlas.helpers.HelpersPlugin;
-import net.mcatlas.helpers.HelpersPlugin.Coordinate;
 import net.mcatlas.helpers.geonames.Destination.Builder;
 
 import java.sql.Connection;
@@ -60,7 +60,7 @@ public class MySQLStorage {
     }
 
     public List<Destination> getNearby(int x, int z, int blockRange) {
-        Coordinate coord = HelpersPlugin.get().getLifeFromMC(-z, -x);
+        Coordinate coord = Coordinate.getLifeFromMC(-z, -x);
         return getNearby(coord.getX(), coord.getY(), blockRange);
     }
 

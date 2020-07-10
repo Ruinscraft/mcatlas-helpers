@@ -6,9 +6,6 @@ import net.mcatlas.helpers.geonames.MySQLStorage;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
-import org.bukkit.World;
-import org.bukkit.entity.ChestedHorse;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -32,8 +29,10 @@ public class HelpersPlugin extends JavaPlugin implements Listener {
 
     private final LinkedList<Double> history = new LinkedList<>();
     private final long tickInterval = 50;
+
     public Map<UUID, Long> players;
     public Set<UUID> recentDeaths;
+
     // tps stuff
     private transient long lastPoll = System.nanoTime();
     private Random random = new Random();
@@ -63,11 +62,13 @@ public class HelpersPlugin extends JavaPlugin implements Listener {
             this.getLogger().info("MySQL enabled!");
         }
 
-        this.players = new HashMap<UUID, Long>();
+        this.players = new HashMap<>();
+
         for (Player player : Bukkit.getOnlinePlayers()) {
             this.players.put(player.getUniqueId(), System.currentTimeMillis());
         }
-        this.recentDeaths = new HashSet<UUID>();
+
+        this.recentDeaths = new HashSet<>();
 
         getServer().getPluginManager().registerEvents(this, this);
         getServer().getPluginManager().registerEvents(new EntityListener(), this);
@@ -75,6 +76,7 @@ public class HelpersPlugin extends JavaPlugin implements Listener {
         getServer().getPluginManager().registerEvents(new BedListener(), this);
         getServer().getPluginManager().registerEvents(new BoatExploitFix(), this);
         getServer().getPluginManager().registerEvents(new GotoTabCompletion(), this);
+
         getCommand("vote").setExecutor(new VoteCommand());
         getCommand("rules").setExecutor(new RulesCommand());
         getCommand("map").setExecutor(new MapCommand());
@@ -119,12 +121,12 @@ public class HelpersPlugin extends JavaPlugin implements Listener {
 
             long memory = getFreeMemory();
             if (memory < 400) {
-                this.getLogger().warning(ChatColor.YELLOW + "Memory at " + memory + " MB!");
+                this.getLogger().warning(ChatColor.YELLOW + "Low memory! " + memory + " MB remaining.");
             }
         }, 1000, 50);
 
-        // donkeys
-        runContainerCreaturesTimer();
+        // Removes donkeys / mules / llamas to prevent a dupe bug. This is hopefully temporary
+        getServer().getScheduler().scheduleSyncRepeatingTask(this, new RemoveChestedHorseTask(getLogger()), 120, 80);
     }
 
     public double getAverageTPS() {
@@ -158,22 +160,6 @@ public class HelpersPlugin extends JavaPlugin implements Listener {
         plugin = null;
     }
 
-    // Removes donkeys / mules / llamas. This is hopefully temporary
-    public void runContainerCreaturesTimer() {
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> {
-            for (World world : Bukkit.getWorlds()) {
-                for (Entity entity : world.getLivingEntities()) {
-                    if (entity instanceof ChestedHorse) {
-                        this.getLogger().info("Removed chested horse at " +
-                                entity.getLocation().getBlockX() + " " + entity.getLocation().getBlockY() +
-                                " " + entity.getLocation().getBlockZ());
-                        entity.remove();
-                    }
-                }
-            }
-        }, 120, 80);
-    }
-
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         event.setJoinMessage(null);
@@ -201,17 +187,11 @@ public class HelpersPlugin extends JavaPlugin implements Listener {
         player.sendMessage("");
         player.sendMessage("");
 
-        if (player.hasPermission("mcatlas.command.renderdistance")) player.setViewDistance(8);
+        if (player.hasPermission("mcatlas.increasedrenderdistance")) {
+            player.setViewDistance(8);
+        }
 
         this.players.put(player.getUniqueId(), System.currentTimeMillis());
-
-        if (player.hasPermission("group.vip1")) {
-            if (!player.hasPermission("group.sponsor") && !player.hasPermission("sponsor.not.redeemable")) {
-                // add to sponsor rank in mcatlas server context
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
-                        "lp user " + player.getName() + " parent set mcatlas-sponsor server=mcatlas");
-            }
-        }
     }
 
     @EventHandler
@@ -244,41 +224,6 @@ public class HelpersPlugin extends JavaPlugin implements Listener {
     // chance out of 100
     public boolean chance(int outOf100) {
         return random.nextInt(100) < outOf100;
-    }
-
-    // returns real life coordinate!!
-    public Coordinate getLifeFromMC(int mcX, int mcY) {
-        double x = mcX / scaling;
-        double y = mcY / scaling * -1;
-        return new Coordinate(x, y);
-    }
-
-    public Coordinate getMCFromLife(double lat, double lon) {
-        int x = (int) (lon * scaling);
-        int y = (int) (lat * scaling) * -1;
-        return new Coordinate(x, y);
-    }
-
-    public class Coordinate {
-        double x; // long
-        double y; // lat
-
-        public Coordinate(double x, double y) {
-            this.x = x;
-            this.y = y;
-        }
-
-        public double getX() {
-            return x;
-        }
-
-        ;
-
-        public double getY() {
-            return y;
-        }
-
-        ;
     }
 
 }

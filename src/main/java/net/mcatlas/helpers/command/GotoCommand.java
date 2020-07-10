@@ -1,7 +1,7 @@
 package net.mcatlas.helpers.command;
 
+import net.mcatlas.helpers.Coordinate;
 import net.mcatlas.helpers.HelpersPlugin;
-import net.mcatlas.helpers.HelpersPlugin.Coordinate;
 import net.mcatlas.helpers.geonames.Destination;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
@@ -55,7 +55,7 @@ public class GotoCommand implements CommandExecutor, TabCompleter {
             Destination best = destinations.get(0);
             double lat = best.getLat();
             double lon = best.getLong();
-            Coordinate coord = HelpersPlugin.get().getMCFromLife(lat, lon);
+            Coordinate coord = Coordinate.getMCFromLife(lat, lon);
             double x = (int) coord.getX() + .5;
             double z = (int) coord.getY() + .5;
             System.out.println(best.getFormattedName() + " " + x + " " + z);
