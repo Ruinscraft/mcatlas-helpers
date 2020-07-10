@@ -1,5 +1,6 @@
 package net.mcatlas.helpers.command;
 
+import net.mcatlas.helpers.HelpersPlugin;
 import org.apache.commons.lang.time.DurationFormatUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -8,8 +9,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import net.mcatlas.helpers.HelpersPlugin;
 
 public class SeenCommand implements CommandExecutor {
 
@@ -28,17 +27,17 @@ public class SeenCommand implements CommandExecutor {
         }
 
         if (target.isOnline()) {
-        	Player player = (Player) target;
-        	if (sender instanceof Player) {
-        		Player playerSender = (Player) sender;
-        		if (playerSender.canSee(player)) {
-        			sendSeenWithTimeOnline(sender, target);
-        			return true;
-        		}
-        	} else {
-        		sendSeenWithTimeOnline(sender, target);
-        		return true;
-        	}
+            Player player = (Player) target;
+            if (sender instanceof Player) {
+                Player playerSender = (Player) sender;
+                if (playerSender.canSee(player)) {
+                    sendSeenWithTimeOnline(sender, target);
+                    return true;
+                }
+            } else {
+                sendSeenWithTimeOnline(sender, target);
+                return true;
+            }
         }
 
         long durationSinceSeen = System.currentTimeMillis() - target.getLastPlayed();
@@ -49,9 +48,9 @@ public class SeenCommand implements CommandExecutor {
     }
 
     public void sendSeenWithTimeOnline(CommandSender sender, OfflinePlayer target) {
-    	long loggedOn = HelpersPlugin.get().getTimeOnline(target.getPlayer());
-    	long timeOnline = System.currentTimeMillis() - loggedOn;
-    	String timeOnlineString = DurationFormatUtils.formatDurationWords(timeOnline, true, true);
+        long loggedOn = HelpersPlugin.get().getTimeOnline(target.getPlayer());
+        long timeOnline = System.currentTimeMillis() - loggedOn;
+        String timeOnlineString = DurationFormatUtils.formatDurationWords(timeOnline, true, true);
         sender.sendMessage(ChatColor.GREEN + target.getName() + " has been online for " + timeOnlineString);
     }
 

@@ -22,15 +22,16 @@ public class SpeedCommand implements CommandExecutor {
         }
 
         if (args.length > 0) {
-        	float speed = 0;
-        	try {
-        		speed = Float.valueOf(args[0]);
-        	} catch (Exception e) {}
-        	if (speed > 1F) {
-        		speed = 1;
-        		player.sendMessage("Can't be higher than 1! Speed set to 1");
-        	}
-        	player.setFlySpeed(speed);
+            float speed = 0;
+            try {
+                speed = Float.valueOf(args[0]);
+            } catch (Exception e) {
+            }
+            if (speed > 1F) {
+                speed = 1;
+                player.sendMessage("Can't be higher than 1! Speed set to 1");
+            }
+            player.setFlySpeed(speed);
         }
 
         player.sendMessage("Flight speed toggled");
