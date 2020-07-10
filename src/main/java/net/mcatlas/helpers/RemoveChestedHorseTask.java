@@ -23,6 +23,7 @@ public class RemoveChestedHorseTask implements Runnable {
                     logger.info("Removed chested horse at " +
                             entity.getLocation().getBlockX() + " " + entity.getLocation().getBlockY() +
                             " " + entity.getLocation().getBlockZ());
+
                     entity.remove();
                 }
             }

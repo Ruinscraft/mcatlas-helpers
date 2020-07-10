@@ -54,9 +54,7 @@ public class MySQLStorage {
     }
 
     public CompletableFuture<List<Destination>> getNearbyFuture(int x, int z, int blockRange) {
-        return CompletableFuture.supplyAsync(() -> {
-            return this.getNearby(x, z, blockRange);
-        });
+        return CompletableFuture.supplyAsync(() -> this.getNearby(x, z, blockRange));
     }
 
     public List<Destination> getNearby(int x, int z, int blockRange) {
@@ -167,7 +165,9 @@ public class MySQLStorage {
     }
 
     public void close() {
-        dataSource.close();
+        if (dataSource != null && !dataSource.isClosed()) {
+            dataSource.close();
+        }
     }
 
     public Connection getConnection() throws SQLException {

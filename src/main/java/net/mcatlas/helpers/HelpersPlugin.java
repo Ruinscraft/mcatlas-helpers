@@ -157,6 +157,11 @@ public class HelpersPlugin extends JavaPlugin implements Listener {
 
     @Override
     public void onDisable() {
+
+        if (storage != null) {
+            storage.close();
+        }
+
         plugin = null;
     }
 
