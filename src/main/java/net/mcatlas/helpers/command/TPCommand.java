@@ -62,7 +62,7 @@ public class TPCommand implements CommandExecutor {
         if (label.toLowerCase().equals("tphere")) {
             if (!player.hasPermission("mcatlas.command.tphere")) {
                 player.sendMessage(ChatColor.RED + "You do not have permission for tphere.");
-                
+
                 return true;
             }
 

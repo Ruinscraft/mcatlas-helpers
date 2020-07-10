@@ -160,11 +160,28 @@ public class EntityListener implements Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void onEntityDamage(EntityDamageEvent event) {
         Entity entity = event.getEntity();
-        if (!(entity instanceof Player)) return;
+
+        if (!(entity instanceof Player)) {
+            return;
+        }
+
+        Player player = (Player) entity;
+
         int y = entity.getLocation().getBlockY();
+
         if (y < 0) {
+            final Location respawnLocation;
+
+            if (player.getBedLocation() != null) {
+                respawnLocation = player.getBedSpawnLocation();
+            } else {
+                respawnLocation = player.getLocation().getWorld().getSpawnLocation();
+            }
+
+            // teleport the player away
+            player.teleport(respawnLocation);
+
             event.setCancelled(true);
-            // maybe a msg? or a teleport to somewhere else?
         }
     }
 
