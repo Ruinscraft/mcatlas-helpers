@@ -196,6 +196,12 @@ public class HelpersPlugin extends JavaPlugin implements Listener {
             player.setViewDistance(8);
         }
 
+        // if Sponsor, show them their perks
+        if (player.hasPermission("group.sponsor")) {
+            player.sendMessage(ChatColor.GRAY + "Thank you for your " + ChatColor.DARK_PURPLE + " Sponsorship" + ChatColor.GRAY + "!");
+            player.sendMessage(ChatColor.GRAY + "Your benefits include: High View Distance, /hat Command, /goto Command, Better Vote Rewards, Powders, Check Owner of Tamed Mob, Get Skulls of Killed Players");
+        }
+
         this.players.put(player.getUniqueId(), System.currentTimeMillis());
     }
 
