@@ -121,7 +121,7 @@ public class EntityListener implements Listener {
 
             event.getEntity().addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20 * 30, 1));
 
-            event.getBreeder().sendMessage(ChatColor.YELLOW + "A pig who was born to fly was born!");
+            event.getBreeder().sendMessage(ChatColor.YELLOW + "You've created a pig who was born to fly!");
         }
     }
 
