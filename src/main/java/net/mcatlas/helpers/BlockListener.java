@@ -38,8 +38,25 @@ public class BlockListener implements Listener {
         }
     }
 
+    /*
+     *  Bedrock/Barrier checks
+     */
     @EventHandler
-    public void onBlockPlace(BlockPlaceEvent event) {
+    public void onBedrockBarrierPlace(BlockPlaceEvent event) {
+        Block block = event.getBlock();
+
+        if (block == null || block.getType() == Material.AIR) {
+            return;
+        }
+
+        if (block.getType() == Material.BEDROCK
+                || block.getType() == Material.BARRIER) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onBedrockBarrierBreak(BlockBreakEvent event) {
         Block block = event.getBlock();
 
         if (block == null || block.getType() == Material.AIR) {
