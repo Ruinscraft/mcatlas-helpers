@@ -74,7 +74,7 @@ public class HelpersPlugin extends JavaPlugin implements Listener {
         getServer().getPluginManager().registerEvents(new EntityListener(), this);
         getServer().getPluginManager().registerEvents(new BlockListener(), this);
         getServer().getPluginManager().registerEvents(new BedListener(), this);
-        getServer().getPluginManager().registerEvents(new BoatExploitFix(), this);
+        getServer().getPluginManager().registerEvents(new ExploitFixes(), this);
         getServer().getPluginManager().registerEvents(new GotoTabCompletion(), this);
 
         getCommand("vote").setExecutor(new VoteCommand());

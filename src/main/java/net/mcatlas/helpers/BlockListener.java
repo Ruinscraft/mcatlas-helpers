@@ -6,6 +6,7 @@ import org.bukkit.block.data.Waterlogged;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class BlockListener implements Listener {
@@ -34,6 +35,20 @@ public class BlockListener implements Listener {
                     block.getWorld().dropItem(block.getLocation(), new ItemStack(Material.PRISMARINE_CRYSTALS, 2));
                 }
             }
+        }
+    }
+
+    @EventHandler
+    public void onBlockPlace(BlockPlaceEvent event) {
+        Block block = event.getBlock();
+
+        if (block == null || block.getType() == Material.AIR) {
+            return;
+        }
+
+        if (block.getType() == Material.BEDROCK
+                || block.getType() == Material.BARRIER) {
+            event.setCancelled(true);
         }
     }
 
