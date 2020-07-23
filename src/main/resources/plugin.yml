@@ -1,6 +1,7 @@
 name: ${name}
 version: ${project.version}
 main: ${mainClass}
+depend: [Towny]
 authors: [royalkingkb, StupidDrew9]
 api-version: 1.13
 
