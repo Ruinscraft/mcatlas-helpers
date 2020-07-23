@@ -7,6 +7,7 @@ import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -41,7 +42,7 @@ public class GotoCommand implements CommandExecutor, TabCompleter {
             return false;
         }
 
-        if (!Bukkit.getWorlds().get(0).equals(player.getWorld())) {
+        if (player.getWorld().getEnvironment() != World.Environment.NORMAL) {
             player.sendMessage(ChatColor.RED + "This command can only be used in the Overworld!");
             return false;
         }
