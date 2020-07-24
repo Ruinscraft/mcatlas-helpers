@@ -1,9 +1,6 @@
 package net.mcatlas.helpers;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -218,6 +215,10 @@ public class EntityListener implements Listener {
         }
 
         Player player = (Player) entity;
+
+        if (player.getWorld().getEnvironment() == World.Environment.THE_END) {
+            return;
+        }
 
         int y = entity.getLocation().getBlockY();
 
