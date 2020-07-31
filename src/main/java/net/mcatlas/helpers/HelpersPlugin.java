@@ -76,6 +76,7 @@ public class HelpersPlugin extends JavaPlugin implements Listener {
         getServer().getPluginManager().registerEvents(new BedListener(), this);
         getServer().getPluginManager().registerEvents(new ExploitFixes(), this);
         getServer().getPluginManager().registerEvents(new GotoTabCompletion(), this);
+        getServer().getPluginManager().registerEvents(new WorldTeleportListener(), this);
 
         getCommand("vote").setExecutor(new VoteCommand());
         getCommand("rules").setExecutor(new RulesCommand());
