@@ -1,9 +1,6 @@
 package net.mcatlas.helpers;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
@@ -67,6 +64,7 @@ public class LilypadRecipeHandler implements Runnable {
                         sugarCaneEntity.remove();
 
                         world.dropItem(itemsSpot, new ItemStack(Material.LILY_PAD, randAmntOfLillies));
+                        world.playSound(itemsSpot, Sound.BLOCK_LILY_PAD_PLACE, 1F, 1F);
                     }, 20 + delay);
                 }
             }
