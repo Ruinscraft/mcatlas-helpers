@@ -126,8 +126,13 @@ public class HelpersPlugin extends JavaPlugin implements Listener {
             }
         }, 1000, 50);
 
+        // handles lilypad growing
+        getServer().getScheduler().scheduleSyncRepeatingTask(
+                this, new LilypadRecipeHandler(plugin), 120, 200);
+
         // Removes donkeys / mules / llamas to prevent a dupe bug. This is hopefully temporary
-        getServer().getScheduler().scheduleSyncRepeatingTask(this, new RemoveChestedHorseTask(getLogger()), 120, 80);
+        getServer().getScheduler().scheduleSyncRepeatingTask(
+                this, new RemoveChestedHorseTask(getLogger()), 120, 80);
     }
 
     public double getAverageTPS() {
@@ -236,6 +241,10 @@ public class HelpersPlugin extends JavaPlugin implements Listener {
     // chance out of 100
     public boolean chance(int outOf100) {
         return random.nextInt(100) < outOf100;
+    }
+
+    public Random getRandom() {
+        return this.random;
     }
 
 }
