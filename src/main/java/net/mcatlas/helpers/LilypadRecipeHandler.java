@@ -30,7 +30,7 @@ public class LilypadRecipeHandler implements Runnable {
 
                 // has to be in water!
                 Location location = vine.getLocation();
-                if (location.getBlock().getType() != Material.WATER ||
+                if (location.getBlock().getType() != Material.WATER &&
                         location.add(0, -1, 0).getBlock().getType() != Material.WATER) {
                     continue;
                 }
