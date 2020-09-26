@@ -35,6 +35,7 @@ public class LilypadRecipeHandler implements Runnable {
                     continue;
                 }
 
+                // nearby item entities!
                 Collection<? extends Item> nearbyItems = location.getNearbyEntitiesByType(Item.class, 2);
                 for (Item sugarCane : nearbyItems) {
                     ItemStack sugarCaneItemStack = sugarCane.getItemStack();
