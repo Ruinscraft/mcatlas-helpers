@@ -21,8 +21,8 @@ public class Coordinate {
     }
 
     public static Coordinate getLifeFromMC(int mcX, int mcY) {
-        double x = mcX / SCALING;
-        double y = mcY / SCALING * -1;
+        double x = (double) mcX / SCALING;
+        double y = (double) mcY / SCALING * -1;
         return new Coordinate(x, y);
     }
 
