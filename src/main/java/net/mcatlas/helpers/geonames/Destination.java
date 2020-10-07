@@ -79,10 +79,10 @@ public class Destination implements Comparable<Destination> {
                 this.getFCode().equals("CONT")) {
             popular = popular - this.population;
             popular = popular / 10;
-        } else if (this.getCountry().equals("USA") || this.getCountry().equals("Canada")) {
-            popular = popular * 2;
         } else if (this.getCountry() == null) {
             popular = popular / 2;
+        } else if (this.getCountry().equals("USA") || this.getCountry().equals("Canada")) {
+            popular = popular * 2;
         } else if (this.getFCode().equals("MT")) { // mountain
             popular = popular * 2;
         } else if (this.getFCode().equals("PCLI")) { // actual country
