@@ -32,9 +32,11 @@ public class HelpersPlugin extends JavaPlugin implements Listener {
 
     public Map<UUID, Long> players;
     public Set<UUID> recentDeaths;
+    public Set<UUID> recentPVPed;
 
     // tps stuff
     private transient long lastPoll = System.nanoTime();
+
     private Random random = new Random();
     private MySQLStorage storage = null;
     private double scaling = 120;
@@ -69,6 +71,7 @@ public class HelpersPlugin extends JavaPlugin implements Listener {
         }
 
         this.recentDeaths = new HashSet<>();
+        this.recentPVPed = new HashSet<>();
 
         getServer().getPluginManager().registerEvents(this, this);
         getServer().getPluginManager().registerEvents(new EntityListener(), this);
@@ -103,8 +106,20 @@ public class HelpersPlugin extends JavaPlugin implements Listener {
         getCommand("gmsp").setExecutor(new GMSpectatorCommand());
         getCommand("gms").setExecutor(new GMSurvivalCommand());
 
-        // tps stuff
+        setupTPS();
+
+        // Handles lilypad growing
+        getServer().getScheduler().scheduleSyncRepeatingTask(
+                this, new LilypadRecipeHandler(plugin), 120, 200);
+
+        // Removes donkeys / mules / llamas to prevent a dupe bug. This is hopefully temporary
+        getServer().getScheduler().scheduleSyncRepeatingTask(
+                this, new RemoveChestedHorseTask(getLogger()), 120, 80);
+    }
+
+    public void setupTPS() {
         history.add(20D);
+
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> {
             final long startTime = System.nanoTime();
             long timeSpent = (startTime - lastPoll) / 1000;
@@ -125,14 +140,6 @@ public class HelpersPlugin extends JavaPlugin implements Listener {
                 this.getLogger().warning(ChatColor.YELLOW + "Low memory! " + memory + " MB remaining.");
             }
         }, 1000, 50);
-
-        // handles lilypad growing
-        getServer().getScheduler().scheduleSyncRepeatingTask(
-                this, new LilypadRecipeHandler(plugin), 120, 200);
-
-        // Removes donkeys / mules / llamas to prevent a dupe bug. This is hopefully temporary
-        getServer().getScheduler().scheduleSyncRepeatingTask(
-                this, new RemoveChestedHorseTask(getLogger()), 120, 80);
     }
 
     public double getAverageTPS() {

@@ -220,6 +220,11 @@ public class EntityListener implements Listener {
             return;
         }
 
+        if (event.getCause() == EntityDamageEvent.DamageCause.CRAMMING) {
+            event.setCancelled(true);
+            return;
+        }
+
         int y = entity.getLocation().getBlockY();
 
         if (y < 0) {
