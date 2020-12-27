@@ -32,7 +32,7 @@ public class HelpersPlugin extends JavaPlugin implements Listener {
 
     public Map<UUID, Long> players;
     public Set<UUID> recentDeaths;
-    public Set<UUID> recentPVPed;
+    public Map<UUID, Long> recentPVPed;
 
     // tps stuff
     private transient long lastPoll = System.nanoTime();
@@ -71,7 +71,7 @@ public class HelpersPlugin extends JavaPlugin implements Listener {
         }
 
         this.recentDeaths = new HashSet<>();
-        this.recentPVPed = new HashSet<>();
+        this.recentPVPed = new HashMap<>();
 
         getServer().getPluginManager().registerEvents(this, this);
         getServer().getPluginManager().registerEvents(new EntityListener(), this);
@@ -252,6 +252,21 @@ public class HelpersPlugin extends JavaPlugin implements Listener {
 
     public Random getRandom() {
         return this.random;
+    }
+
+    public boolean hasRecentlyPVPed(Player player) {
+        return this.recentPVPed.keySet().contains(player.getUniqueId());
+    }
+
+    public void addPVPedPlayer(Player player) {
+        UUID uuid = player.getUniqueId();
+        long currentTime = System.currentTimeMillis();
+        this.recentPVPed.put(uuid, currentTime);
+        this.getServer().getScheduler().scheduleSyncDelayedTask(this, () -> {
+            if (this.recentPVPed.get(uuid) == currentTime) {
+                this.recentDeaths.remove(uuid);
+            }
+        }, 20 * 30);
     }
 
 }

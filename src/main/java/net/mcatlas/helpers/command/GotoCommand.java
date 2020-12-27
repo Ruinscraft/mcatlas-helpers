@@ -42,6 +42,11 @@ public class GotoCommand implements CommandExecutor, TabCompleter {
             return false;
         }
 
+        if (HelpersPlugin.get().hasRecentlyPVPed(player)) {
+            player.sendMessage(ChatColor.RED + "You're in combat. Wait a little bit!");
+            return false;
+        }
+
         if (player.getWorld().getEnvironment() != World.Environment.NORMAL) {
             player.sendMessage(ChatColor.RED + "This command can only be used in the Overworld!");
             return false;
@@ -73,6 +78,10 @@ public class GotoCommand implements CommandExecutor, TabCompleter {
                 player.sendMessage(ChatColor.YELLOW + "Teleporting in 3 seconds...");
 
                 Bukkit.getScheduler().runTaskLater(HelpersPlugin.get(), () -> {
+                    if (HelpersPlugin.get().hasRecentlyPVPed(player)) {
+                        player.sendMessage(ChatColor.RED + "You're in combat. Wait a little bit!");
+                        return;
+                    }
                     player.teleportAsync(new Location(player.getWorld(), x, y, z));
                     player.sendMessage(ChatColor.YELLOW + "You've been teleported to " +
                             ChatColor.GREEN + best.getFormattedName());
