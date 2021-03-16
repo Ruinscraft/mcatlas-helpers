@@ -33,6 +33,7 @@ public class HelpersPlugin extends JavaPlugin implements Listener {
     public Map<UUID, Long> players;
     public Set<UUID> recentDeaths;
     public Map<UUID, Long> recentPVPed;
+    public Map<String, Integer> hopperActions;
 
     // tps stuff
     private transient long lastPoll = System.nanoTime();
@@ -73,6 +74,8 @@ public class HelpersPlugin extends JavaPlugin implements Listener {
         this.recentDeaths = new HashSet<>();
         this.recentPVPed = new HashMap<>();
 
+        this.hopperActions = new HashMap<>();
+
         getServer().getPluginManager().registerEvents(this, this);
         getServer().getPluginManager().registerEvents(new EntityListener(), this);
         getServer().getPluginManager().registerEvents(new BlockListener(), this);
@@ -105,6 +108,7 @@ public class HelpersPlugin extends JavaPlugin implements Listener {
         getCommand("gmc").setExecutor(new GMCreativeCommand());
         getCommand("gmsp").setExecutor(new GMSpectatorCommand());
         getCommand("gms").setExecutor(new GMSurvivalCommand());
+        getCommand("hopperaction").setExecutor(new HopperActionCommand());
 
         setupTPS();
 
@@ -264,9 +268,22 @@ public class HelpersPlugin extends JavaPlugin implements Listener {
         this.recentPVPed.put(uuid, currentTime);
         this.getServer().getScheduler().scheduleSyncDelayedTask(this, () -> {
             if (this.recentPVPed.get(uuid) == currentTime) {
-                this.recentDeaths.remove(uuid);
+                this.recentPVPed.remove(uuid);
             }
         }, 20 * 30);
+    }
+
+    public void logHopperAction(String location) {
+        if (this.hopperActions.containsKey(location)) {
+            int currentAmnt = hopperActions.get(location);
+            hopperActions.put(location, currentAmnt + 1);
+        } else {
+            hopperActions.put(location, 1);
+        }
+    }
+
+    public Map<String, Integer> getHopperActions() {
+        return this.hopperActions;
     }
 
 }

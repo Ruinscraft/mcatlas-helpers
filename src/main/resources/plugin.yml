@@ -56,6 +56,8 @@ commands:
     permission: mcatlas.command.hat
   entitycount:
     permission: mcatlas.command.entitycount
+  hopperaction:
+    permission: mcatlas.command.hopperaction
 permissions:
   mcatlas.tamedowner:
     default: op

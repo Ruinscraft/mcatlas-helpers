@@ -1,5 +1,6 @@
 package net.mcatlas.helpers;
 
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.Waterlogged;
@@ -8,6 +9,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.inventory.InventoryMoveItemEvent;
+import org.bukkit.event.inventory.InventoryPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class BlockListener implements Listener {
@@ -68,6 +71,30 @@ public class BlockListener implements Listener {
                 || block.getType() == Material.BARRIER) {
             event.setCancelled(true);
         }
+    }
+
+    @EventHandler
+    public void onHopperMoveEvent(InventoryMoveItemEvent event) {
+        if (HelpersPlugin.get().getAverageTPS() > 16) {
+            return;
+        }
+        Location loc = event.getDestination().getLocation();
+        String formattedX = "" + (int) (loc.getBlockX() / 64) * 64;
+        String formattedZ = "" + (int) (loc.getBlockZ() / 64) * 64;
+        String formattedLoc = formattedX + ", " + formattedZ;
+        HelpersPlugin.get().logHopperAction(formattedLoc);
+    }
+
+    @EventHandler
+    public void onHopperPickupEvent(InventoryPickupItemEvent event) {
+        if (HelpersPlugin.get().getAverageTPS() > 16) {
+            return;
+        }
+        Location loc = event.getInventory().getLocation();
+        String formattedX = "" + (int) (loc.getBlockX() / 64) * 64;
+        String formattedZ = "" + (int) (loc.getBlockZ() / 64) * 64;
+        String formattedLoc = formattedX + ", " + formattedZ;
+        HelpersPlugin.get().logHopperAction(formattedLoc);
     }
 
 }
