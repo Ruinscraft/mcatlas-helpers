@@ -21,32 +21,20 @@
             <id>papermc</id>
             <url>https://papermc.io/repo/repository/maven-public/</url>
         </repository>
-        <repository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io</url>
-        </repository>
     </repositories>
 
     <dependencies>
         <dependency>
             <groupId>com.destroystokyo.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>1.13.2-R0.1-SNAPSHOT</version>
+            <version>1.16.5-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
-        <!-- MySQL pooling -->
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
-            <version>2.7.8</version>
+            <version>4.0.3</version>
             <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>Towny</groupId>
-            <artifactId>Towny</artifactId>
-            <version>unknown</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/lib/Towny-0.96.2.0-for-1.13.2.jar</systemPath>
         </dependency>
     </dependencies>
 
@@ -70,6 +58,5 @@
         </resources>
         <finalName>${project.name}</finalName>
     </build>
-
 
 </project>

@@ -174,7 +174,6 @@ public class HelpersPlugin extends JavaPlugin implements Listener {
 
     @Override
     public void onDisable() {
-
         if (storage != null) {
             storage.close();
         }
@@ -209,14 +208,15 @@ public class HelpersPlugin extends JavaPlugin implements Listener {
         player.sendMessage("");
         player.sendMessage("");
 
-        if (player.hasPermission("mcatlas.increasedrenderdistance")) {
-            player.setViewDistance(8);
-        }
+        // Paper's setViewDistance is no longer supported
+//        if (player.hasPermission("mcatlas.increasedrenderdistance")) {
+//            player.setViewDistance(8);
+//        }
 
         // if Sponsor, show them their perks
         if (player.hasPermission("group.sponsor")) {
             player.sendMessage(ChatColor.DARK_PURPLE + "Thank you for your sponsorship!");
-            player.sendMessage(ChatColor.GRAY + "Your benefits include: High View Distance, /hat Command, /goto Command, Better Vote Rewards, Powders, Check Owner of Tamed Mob, Get Skulls of Killed Players");
+            player.sendMessage(ChatColor.GRAY + "Your benefits include: /hat Command, /goto Command, Better Vote Rewards, Powders, Check Owner of Tamed Mob, Get Skulls of Killed Players");
         }
 
         this.players.put(player.getUniqueId(), System.currentTimeMillis());

@@ -192,7 +192,9 @@ public class EntityListener implements Listener {
             case ENDERMAN:
                 if (HelpersPlugin.get().chance(33)) drops.add(new ItemStack(Material.PHANTOM_MEMBRANE, 1));
                 return;
-            case PIG_ZOMBIE:
+            case PIGLIN:
+            case ZOMBIFIED_PIGLIN:
+            case PIGLIN_BRUTE:
                 if (HelpersPlugin.get().chance(20)) drops.add(new ItemStack(Material.BLAZE_ROD, 1));
                 return;
             case WITHER:

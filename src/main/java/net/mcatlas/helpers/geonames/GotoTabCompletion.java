@@ -18,7 +18,6 @@ public class GotoTabCompletion implements Listener {
     @EventHandler
     public void onAsyncTabComplete(AsyncTabCompleteEvent event) {
         if ((!event.isCommand() && !event.getBuffer().startsWith("/")) || event.getBuffer().indexOf(" ") == -1) {
-            System.out.println("nope");
             return;
         }
 
