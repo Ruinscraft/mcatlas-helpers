@@ -5,6 +5,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -42,6 +44,10 @@ public class NearCommand implements CommandExecutor {
 
         for (Player player : firstPlayer.getWorld().getPlayers()) {
             if (player.equals(firstPlayer)) continue;
+            // If the player has invis potion and the command caller isn't staff
+            if (!firstPlayer.hasPermission("group.helper")) {
+                if (player.hasPotionEffect(PotionEffectType.INVISIBILITY)) continue;
+            }
             if (!firstPlayer.canSee(player)) continue;
             int playerDistance = (int) player.getLocation().distance(firstPlayer.getLocation());
             if (player.getLocation().distance(firstPlayer.getLocation()) <= maxDistance) {
