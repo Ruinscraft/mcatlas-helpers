@@ -45,7 +45,7 @@ public class WhereIsCommand implements CommandExecutor, TabCompleter {
             return false;
         }
 
-        HelpersPlugin.get().getStorage().getAutoCompleteFuture(String.join(" ", args)).thenAccept(destinations -> {
+        HelpersPlugin.get().getStorage().getDestinationsFromLocationNameFuture(String.join(" ", args)).thenAccept(destinations -> {
             if (destinations == null || destinations.size() == 0) {
                 player.sendMessage(ChatColor.RED + "There were no locations with this name.");
                 return;

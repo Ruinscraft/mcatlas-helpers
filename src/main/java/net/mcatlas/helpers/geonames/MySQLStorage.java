@@ -20,6 +20,7 @@ public class MySQLStorage {
 
     private String query_destination;
     private String query_area;
+    private String query_random;
 
     public MySQLStorage(String host, int port,
                         String database, String geoTable, String username, String password) {
@@ -27,6 +28,7 @@ public class MySQLStorage {
                 " AND admin1 LIKE ? AND country LIKE ?;";
         query_area = "SELECT * FROM " + geoTable + " WHERE latitude < ? AND latitude > ? AND " +
                 "longitude < ? AND longitude > ?;";
+        query_random = "SELECT * FROM " + geoTable + " ORDER BY RAND() LIMIT 1;";
 
         dataSource = new HikariDataSource();
 
@@ -113,13 +115,13 @@ public class MySQLStorage {
         return destinations;
     }
 
-    public CompletableFuture<List<Destination>> getAutoCompleteFuture(String string) {
+    public CompletableFuture<List<Destination>> getDestinationsFromLocationNameFuture(String string) {
         return CompletableFuture.supplyAsync(() -> {
-            return getAutoComplete(string);
+            return getDestinationsFromLocationName(string);
         });
     }
 
-    public List<Destination> getAutoComplete(String string) {
+    public List<Destination> getDestinationsFromLocationName(String string) {
         List<Destination> destinations = new ArrayList<>();
 
         String asciiname = "";
@@ -178,6 +180,35 @@ public class MySQLStorage {
 
         Collections.sort(destinations);
         return destinations;
+    }
+
+    public CompletableFuture<Destination> getRandomLocationFuture() {
+        return CompletableFuture.supplyAsync(() -> {
+            Destination destination = null;
+
+            try (Connection c = getConnection();
+                 PreparedStatement ps = c.prepareStatement(query_random)) {
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        String name = rs.getString("asciiname");
+                        double lat = rs.getDouble("latitude");
+                        double lon = rs.getDouble("longitude");
+
+                        Destination.Builder builder = new Builder(name, lat, lon);
+                        builder.alternateNames(
+                                rs.getString("alternateNames")).fcode(rs.getString("fcode"))
+                                .country(rs.getString("country")).adminZone(rs.getString("admin1"))
+                                .population(rs.getInt("population")).timezone(rs.getString("timezone"));
+
+                        destination = builder.build();
+                    }
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            return destination;
+        });
     }
 
     public void close() {

@@ -37,6 +37,46 @@ public class GotoCommand implements CommandExecutor, TabCompleter {
             return false;
         }
 
+        if (args.length == 1 && args[0].equalsIgnoreCase("random")) {
+            HelpersPlugin.get().getStorage().getRandomLocationFuture().thenAccept(destination -> {
+                double lat = destination.getLat();
+                double lon = destination.getLong();
+                Coordinate coord = Coordinate.getMCFromLife(lat, lon);
+                double x = (int) coord.getX() + .5;
+                double z = (int) coord.getY() + .5;
+                System.out.println(destination.getFormattedName() + " " + x + " " + z);
+
+                Bukkit.getScheduler().runTask(HelpersPlugin.get(), () -> {
+                    double y = player.getWorld().getHighestBlockYAt((int) (x - .5), (int) (z - .5)) + 1;
+                    Location teleportTo = new Location(player.getWorld(), x, y, z);
+                    if (teleportTo.getBlock().getBlockData().getMaterial() == Material.LAVA ||
+                            teleportTo.getBlock().getBlockData().getMaterial() == Material.CACTUS) {
+                        player.sendMessage(ChatColor.RED + "There is lava or cactus at this location! Too unsafe!");
+                        return;
+                    }
+
+                    player.sendMessage(ChatColor.YELLOW + "Teleporting in 3 seconds...");
+
+                    Bukkit.getScheduler().runTaskLater(HelpersPlugin.get(), () -> {
+                        if (HelpersPlugin.get().hasRecentlyPVPed(player)) {
+                            player.sendMessage(ChatColor.RED + "You're in combat. Wait a little bit!");
+                            return;
+                        }
+                        player.teleportAsync(new Location(player.getWorld(), x, y, z));
+                        player.sendMessage(ChatColor.YELLOW + "You've been teleported to " +
+                                ChatColor.GREEN + destination.getFormattedName());
+                    }, 20 * 3);
+
+                    this.recents.add(player);
+                    Bukkit.getScheduler().runTaskLater(HelpersPlugin.get(), () -> {
+                        this.recents.remove(player);
+                    }, 20 * 12); // 12 sec
+                });
+            });
+
+            return false;
+        }
+
         if (recents.contains(player)) {
             player.sendMessage(ChatColor.RED + "You've used this command too recently!");
             return false;
@@ -52,7 +92,7 @@ public class GotoCommand implements CommandExecutor, TabCompleter {
             return false;
         }
 
-        HelpersPlugin.get().getStorage().getAutoCompleteFuture(String.join(" ", args)).thenAccept(destinations -> {
+        HelpersPlugin.get().getStorage().getDestinationsFromLocationNameFuture(String.join(" ", args)).thenAccept(destinations -> {
             if (destinations == null || destinations.size() == 0) {
                 player.sendMessage(ChatColor.RED + "There were no locations with this name.");
                 return;
