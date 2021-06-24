@@ -1,5 +1,9 @@
 package net.mcatlas.helpers.geonames;
 
+/**
+ * I added this with intents of displaying when typing /whereami
+ * But it isn't used for that so it's just for cleaner code now
+ */
 public enum LocationAccuracy {
     VERY_HIGH(5),
     HIGH(35),

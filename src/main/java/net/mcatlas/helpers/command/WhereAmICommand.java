@@ -1,10 +1,10 @@
 package net.mcatlas.helpers.command;
 
+import net.mcatlas.helpers.Coordinate;
 import net.mcatlas.helpers.HelpersPlugin;
 import net.mcatlas.helpers.geonames.Destination;
 import net.mcatlas.helpers.geonames.LocationAccuracy;
 import net.md_5.bungee.api.ChatColor;
-import org.apache.commons.lang.WordUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -61,9 +61,20 @@ public class WhereAmICommand implements CommandExecutor {
             }
 
             Destination best = destinations.get(0);
-            String accuracy = WordUtils.capitalizeFully(best.getAccuracy().name().replace("_", " "));
+
+            double lat = best.getLat();
+            double lon = best.getLong();
+            Coordinate coord = Coordinate.getMCFromLife(lat, lon);
+            int x = (int) coord.getX();
+            int z = (int) coord.getY();
+
             Bukkit.getScheduler().runTask(HelpersPlugin.get(), () -> {
-                player.sendMessage(ChatColor.YELLOW + "You're near " + ChatColor.GREEN + best.getFormattedName() + " " + ChatColor.DARK_GRAY + "(Accuracy: " + accuracy + ")");
+                Location bestLocation = player.getLocation().clone();
+                bestLocation.setX(x);
+                bestLocation.setZ(z);
+                int distance = (int) bestLocation.distance(loc);
+
+                player.sendMessage(ChatColor.YELLOW + "You're near " + ChatColor.GREEN + best.getFormattedName() + " " + ChatColor.DARK_GRAY + "(" + distance + " blocks away");
             });
         });
 
