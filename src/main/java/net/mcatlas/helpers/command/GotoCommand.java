@@ -4,6 +4,8 @@ import net.mcatlas.helpers.Coordinate;
 import net.mcatlas.helpers.HelpersPlugin;
 import net.mcatlas.helpers.geonames.Destination;
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -38,6 +40,11 @@ public class GotoCommand implements CommandExecutor, TabCompleter {
         }
 
         if (args.length == 1 && args[0].equalsIgnoreCase("random")) {
+            if (recents.contains(player)) {
+                player.sendMessage(ChatColor.RED + "You've used this command too recently!");
+                return false;
+            }
+
             HelpersPlugin.get().getStorage().getRandomLocationFuture().thenAccept(destination -> {
                 double lat = destination.getLat();
                 double lon = destination.getLong();
@@ -65,6 +72,16 @@ public class GotoCommand implements CommandExecutor, TabCompleter {
                         player.teleportAsync(new Location(player.getWorld(), x, y, z));
                         player.sendMessage(ChatColor.YELLOW + "You've been teleported to " +
                                 ChatColor.GREEN + destination.getFormattedName());
+
+                        String dynmapLink = HelpersPlugin.get().getDynmapLink()
+                                .replace("[X]", "" + x)
+                                .replace("[Z]", "" + z)
+                                .replace("[ZOOM]", "" + 8);
+                        TextComponent dynmapMsg = new TextComponent("[Click to view in Dynmap]");
+                        dynmapMsg.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, dynmapLink));
+                        dynmapMsg.setColor(ChatColor.GRAY);
+                        dynmapMsg.setUnderlined(true);
+                        player.sendMessage(dynmapMsg);
                     }, 20 * 3);
 
                     this.recents.add(player);
@@ -74,11 +91,6 @@ public class GotoCommand implements CommandExecutor, TabCompleter {
                 });
             });
 
-            return false;
-        }
-
-        if (recents.contains(player)) {
-            player.sendMessage(ChatColor.RED + "You've used this command too recently!");
             return false;
         }
 
@@ -125,6 +137,16 @@ public class GotoCommand implements CommandExecutor, TabCompleter {
                     player.teleportAsync(new Location(player.getWorld(), x, y, z));
                     player.sendMessage(ChatColor.YELLOW + "You've been teleported to " +
                             ChatColor.GREEN + best.getFormattedName());
+
+                    String dynmapLink = HelpersPlugin.get().getDynmapLink()
+                            .replace("[X]", "" + x)
+                            .replace("[Z]", "" + z)
+                            .replace("[ZOOM]", "" + 8);
+                    TextComponent dynmapMsg = new TextComponent("[Click to view in Dynmap]");
+                    dynmapMsg.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, dynmapLink));
+                    dynmapMsg.setColor(ChatColor.GRAY);
+                    dynmapMsg.setUnderlined(true);
+                    player.sendMessage(dynmapMsg);
                 }, 20 * 3);
             });
         });

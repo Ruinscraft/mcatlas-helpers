@@ -37,7 +37,7 @@ public class GotoTabCompletion implements Listener {
         String argsAttached = event.getBuffer().replace("/goto ", "").replace("/whereis ", "");
         if (argsAttached.length() < 3) return;
 
-        List<Destination> destinations = HelpersPlugin.get().getStorage().getAutoComplete(argsAttached);
+        List<Destination> destinations = HelpersPlugin.get().getStorage().getDestinationsFromLocationName(argsAttached);
         if (destinations == null || destinations.isEmpty()) return;
 
         // calc amount of good destinations in the list

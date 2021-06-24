@@ -4,6 +4,8 @@ import net.mcatlas.helpers.Coordinate;
 import net.mcatlas.helpers.HelpersPlugin;
 import net.mcatlas.helpers.geonames.Destination;
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.command.Command;
@@ -64,7 +66,11 @@ public class WhereIsCommand implements CommandExecutor, TabCompleter {
                     .replace("[X]", "" + x)
                     .replace("[Z]", "" + z)
                     .replace("[ZOOM]", "" + 8);
-            player.sendMessage(ChatColor.GRAY + dynmapLink);
+            TextComponent dynmapMsg = new TextComponent("[Click to view in Dynmap]");
+            dynmapMsg.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, dynmapLink));
+            dynmapMsg.setColor(ChatColor.GRAY);
+            dynmapMsg.setUnderlined(true);
+            player.sendMessage(dynmapMsg);
         });
 
         this.recents.add(player);
