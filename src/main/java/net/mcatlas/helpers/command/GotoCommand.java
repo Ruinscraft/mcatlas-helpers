@@ -94,6 +94,11 @@ public class GotoCommand implements CommandExecutor, TabCompleter {
             return false;
         }
 
+        if (recents.contains(player)) {
+            player.sendMessage(ChatColor.RED + "You've used this command too recently!");
+            return false;
+        }
+
         if (HelpersPlugin.get().hasRecentlyPVPed(player)) {
             player.sendMessage(ChatColor.RED + "You're in combat. Wait a little bit!");
             return false;
