@@ -59,13 +59,12 @@ public class WhereIsCommand implements CommandExecutor, TabCompleter {
             int z = (int) coord.getY();
 
             player.sendMessage(ChatColor.GREEN + best.getFormattedName());
-            player.sendMessage(ChatColor.GREEN + "X: " + ChatColor.YELLOW + x);
-            player.sendMessage(ChatColor.GREEN + "Z: " + ChatColor.YELLOW + z);
+            player.sendMessage(ChatColor.GREEN + "X: " + ChatColor.YELLOW + x + ChatColor.GREEN + " Z: " + ChatColor.YELLOW + z);
             String dynmapLink = HelpersPlugin.get().getDynmapLink()
                     .replace("[X]", "" + x)
                     .replace("[Z]", "" + z)
                     .replace("[ZOOM]", "" + 8);
-            player.sendMessage(ChatColor.GREEN + "Dynmap Location: " + ChatColor.GRAY + dynmapLink);
+            player.sendMessage(ChatColor.GRAY + dynmapLink);
         });
 
         this.recents.add(player);
