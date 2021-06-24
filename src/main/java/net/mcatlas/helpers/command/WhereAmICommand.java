@@ -74,7 +74,7 @@ public class WhereAmICommand implements CommandExecutor {
                 bestLocation.setZ(z);
                 int distance = (int) bestLocation.distance(loc);
 
-                player.sendMessage(ChatColor.YELLOW + "You're near " + ChatColor.GREEN + best.getFormattedName() + " " + ChatColor.DARK_GRAY + "(" + distance + " blocks away");
+                player.sendMessage(ChatColor.YELLOW + "You're near " + ChatColor.GREEN + best.getFormattedName() + " " + ChatColor.DARK_GRAY + "(" + distance + " blocks away)");
             });
         });
 
