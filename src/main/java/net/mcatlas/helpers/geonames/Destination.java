@@ -83,7 +83,9 @@ public class Destination implements Comparable<Destination> {
     public long popularityIndex() {
         long popular = this.population + (4000 * this.getAltNames().size());
 
-        if (this.getFCode().equals("ADM1") || this.getFCode().equals("ADM2") || // admin district (counties, states, etc)
+        if (this.getName().equals(this.getAdminZone()) || this.getAdminZone().contains(this.getName())) {
+            popular = popular / 2;
+        } else if (this.getFCode().equals("ADM1") || this.getFCode().equals("ADM2") || // admin district (counties, states, etc)
                 this.getFCode().equals("ADM3") || this.getFCode().equals("ADM4") ||
                 this.getFCode().equals("ADM5") || this.getFCode().equals("ADMD") ||
                 this.getFCode().equals("CONT")) {
