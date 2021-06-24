@@ -79,6 +79,8 @@ public class BlockListener implements Listener {
             return;
         }
         Location loc = event.getDestination().getLocation();
+        if (loc == null) return;
+
         String formattedX = "" + (int) (loc.getBlockX() / 64) * 64;
         String formattedZ = "" + (int) (loc.getBlockZ() / 64) * 64;
         String formattedLoc = formattedX + ", " + formattedZ;
@@ -91,6 +93,8 @@ public class BlockListener implements Listener {
             return;
         }
         Location loc = event.getInventory().getLocation();
+        if (loc == null) return;
+
         String formattedX = "" + (int) (loc.getBlockX() / 64) * 64;
         String formattedZ = "" + (int) (loc.getBlockZ() / 64) * 64;
         String formattedLoc = formattedX + ", " + formattedZ;

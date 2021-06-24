@@ -55,17 +55,17 @@ public class WhereIsCommand implements CommandExecutor, TabCompleter {
             double lat = best.getLat();
             double lon = best.getLong();
             Coordinate coord = Coordinate.getMCFromLife(lat, lon);
-            double x = (int) coord.getX();
-            double z = (int) coord.getY();
+            int x = (int) coord.getX();
+            int z = (int) coord.getY();
 
-            player.sendMessage(ChatColor.GREEN + best.getFormattedName() +
-                    ChatColor.YELLOW + " is located at");
-            player.sendMessage(ChatColor.GREEN + "X: " + x + "; Z: " + z);
+            player.sendMessage(ChatColor.GREEN + best.getFormattedName());
+            player.sendMessage(ChatColor.GREEN + "X: " + ChatColor.YELLOW + x);
+            player.sendMessage(ChatColor.GREEN + "Z: " + ChatColor.YELLOW + z);
             String dynmapLink = HelpersPlugin.get().getDynmapLink()
                     .replace("[X]", "" + x)
                     .replace("[Z]", "" + z)
-                    .replace("[ZOOM]", "" + 7);
-            player.sendMessage(ChatColor.GRAY + dynmapLink);
+                    .replace("[ZOOM]", "" + 8);
+            player.sendMessage(ChatColor.GREEN + "Dynmap Location: " + ChatColor.GRAY + dynmapLink);
         });
 
         this.recents.add(player);
