@@ -29,12 +29,12 @@ public class GotoTabCompletion implements Listener {
             return;
         }
 
-        if (!event.getBuffer().startsWith("/goto")) return;
+        if (!event.getBuffer().startsWith("/goto") && !event.getBuffer().startsWith("/whereis")) return;
         if (!HelpersPlugin.get().hasStorage()) return;
 
         List<String> tabCompleters = new ArrayList<>();
 
-        String argsAttached = event.getBuffer().replace("/goto ", "");
+        String argsAttached = event.getBuffer().replace("/goto ", "").replace("/whereis ", "");
         if (argsAttached.length() < 3) return;
 
         List<Destination> destinations = HelpersPlugin.get().getStorage().getAutoComplete(argsAttached);

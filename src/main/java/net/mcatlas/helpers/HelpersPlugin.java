@@ -41,6 +41,7 @@ public class HelpersPlugin extends JavaPlugin implements Listener {
     private Random random = new Random();
     private MySQLStorage storage = null;
     private double scaling = 120;
+    private String dynmapLink = "https://mcatlas.net/map/?worldname=earth_1-1000_1-13&mapname=flat&zoom=[ZOOM]&x=[X]&y=64&z=[Z]";
 
     public static HelpersPlugin get() {
         return plugin;
@@ -109,6 +110,7 @@ public class HelpersPlugin extends JavaPlugin implements Listener {
         getCommand("gmsp").setExecutor(new GMSpectatorCommand());
         getCommand("gms").setExecutor(new GMSurvivalCommand());
         getCommand("hopperaction").setExecutor(new HopperActionCommand());
+        getCommand("whereis").setExecutor(new WhereIsCommand());
 
         setupTPS();
 
@@ -249,6 +251,10 @@ public class HelpersPlugin extends JavaPlugin implements Listener {
         return this.scaling;
     }
 
+    public String getDynmapLink() {
+        return this.dynmapLink;
+    }
+
     // chance out of 100
     public boolean chance(int outOf100) {
         return random.nextInt(100) < outOf100;
@@ -259,7 +265,7 @@ public class HelpersPlugin extends JavaPlugin implements Listener {
     }
 
     public boolean hasRecentlyPVPed(Player player) {
-        return this.recentPVPed.keySet().contains(player.getUniqueId());
+        return this.recentPVPed.containsKey(player.getUniqueId());
     }
 
     public void addPVPedPlayer(Player player) {
