@@ -2,7 +2,9 @@ package net.mcatlas.helpers.command;
 
 import net.mcatlas.helpers.HelpersPlugin;
 import net.mcatlas.helpers.geonames.Destination;
+import net.mcatlas.helpers.geonames.LocationAccuracy;
 import net.md_5.bungee.api.ChatColor;
+import org.apache.commons.lang.WordUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -49,7 +51,7 @@ public class WhereAmICommand implements CommandExecutor {
         Bukkit.getScheduler().runTaskAsynchronously(HelpersPlugin.get(), () -> {
             List<Destination> destinations =
                     HelpersPlugin.get().getStorage()
-                            .getNearbyDestinations(loc.clone().getBlockX(), loc.clone().getBlockZ(), 5, 0);
+                            .getNearbyDestinations(loc.clone().getBlockX(), loc.clone().getBlockZ(), LocationAccuracy.VERY_HIGH);
 
             if (destinations.size() == 0) {
                 Bukkit.getScheduler().runTask(HelpersPlugin.get(), () -> {
@@ -59,8 +61,9 @@ public class WhereAmICommand implements CommandExecutor {
             }
 
             Destination best = destinations.get(0);
+            String accuracy = WordUtils.capitalizeFully(best.getAccuracy().name().replace("_", " "));
             Bukkit.getScheduler().runTask(HelpersPlugin.get(), () -> {
-                player.sendMessage(ChatColor.YELLOW + "You're near " + ChatColor.GREEN + best.getFormattedName());
+                player.sendMessage(ChatColor.YELLOW + "You're near " + ChatColor.GREEN + best.getFormattedName() + " " + ChatColor.DARK_GRAY + "(Accuracy: " + accuracy + ")");
             });
         });
 

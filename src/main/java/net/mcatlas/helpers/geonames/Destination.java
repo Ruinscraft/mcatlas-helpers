@@ -18,6 +18,8 @@ public class Destination implements Comparable<Destination> {
     private String adminZone;
     private String timezone;
 
+    private LocationAccuracy accuracy;
+
     private Destination(Builder builder) {
         this.asciiname = builder.asciiname;
         this.latitude = builder.latitude;
@@ -68,6 +70,14 @@ public class Destination implements Comparable<Destination> {
 
     public String getFormattedName() {
         return getName() + ", " + getAdminZone() + ", " + getCountry();
+    }
+
+    public void setAccuracy(LocationAccuracy acc) {
+        this.accuracy = acc;
+    }
+
+    public LocationAccuracy getAccuracy() {
+        return accuracy;
     }
 
     public long popularityIndex() {

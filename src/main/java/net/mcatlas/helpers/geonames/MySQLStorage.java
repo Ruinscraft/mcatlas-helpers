@@ -41,16 +41,32 @@ public class MySQLStorage {
 
     // run async!!
     // cycles a few times to check in a radius for nearby destinations
-    public List<Destination> getNearbyDestinations(int x, int z, int blockRange, final int amntSoFar) {
-        List<Destination> destinations = HelpersPlugin.get().getStorage().getNearby(x, z, blockRange);
+    public List<Destination> getNearbyDestinations(int x, int z, LocationAccuracy locationAccuracy) {
+        List<Destination> destinations = HelpersPlugin.get().getStorage().getNearby(x, z, locationAccuracy.range);
 
-        if (amntSoFar >= 2) return destinations;
-        if (destinations.size() > 0) return destinations;
+        if (destinations.size() > 0) {
+            final LocationAccuracy currentAccuracy = locationAccuracy;
+            destinations.forEach(d -> d.setAccuracy(currentAccuracy));
+            return destinations;
+        }
 
-        if (amntSoFar == 0) blockRange = 35;
-        if (amntSoFar == 1) blockRange = 250;
+        switch (locationAccuracy) {
+            case LOW:
+                return destinations;
+            case MEDIUM:
+                locationAccuracy = LocationAccuracy.LOW;
+                break;
+            case HIGH:
+                locationAccuracy = LocationAccuracy.MEDIUM;
+                break;
+            case VERY_HIGH:
+                locationAccuracy = LocationAccuracy.HIGH;
+                break;
+            default:
+                break;
+        }
 
-        return getNearbyDestinations(x, z, blockRange, amntSoFar + 1);
+        return getNearbyDestinations(x, z, locationAccuracy);
     }
 
     public CompletableFuture<List<Destination>> getNearbyFuture(int x, int z, int blockRange) {
