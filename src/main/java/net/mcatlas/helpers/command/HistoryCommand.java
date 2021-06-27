@@ -9,7 +9,7 @@ public class HistoryCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        sender.sendMessage(ChatColor.AQUA + "Find tutorials on how to play this server here: " + ChatColor.YELLOW + "https://mcatlas.net/history");
+        sender.sendMessage(ChatColor.AQUA + "Read history written by the users of MCATLAS: " + ChatColor.YELLOW + "https://mcatlas.net/history");
         return true;
     }
 
