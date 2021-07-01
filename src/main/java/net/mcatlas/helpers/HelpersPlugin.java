@@ -43,6 +43,8 @@ public class HelpersPlugin extends JavaPlugin implements Listener {
     private double scaling = 120;
     private String dynmapLink = "https://mcatlas.net/map/?worldname=earth_1-1000_1-13&mapname=flat&zoom=[ZOOM]&x=[X]&y=64&z=[Z]";
 
+    private List<String> joinInfoMessages;
+
     public static HelpersPlugin get() {
         return plugin;
     }
@@ -76,6 +78,8 @@ public class HelpersPlugin extends JavaPlugin implements Listener {
         this.recentPVPed = new HashMap<>();
 
         this.hopperActions = new HashMap<>();
+
+        this.joinInfoMessages = getConfig().getStringList("joinInfoMessages");
 
         getServer().getPluginManager().registerEvents(this, this);
         getServer().getPluginManager().registerEvents(new EntityListener(), this);
@@ -111,6 +115,7 @@ public class HelpersPlugin extends JavaPlugin implements Listener {
         getCommand("gms").setExecutor(new GMSurvivalCommand());
         getCommand("hopperaction").setExecutor(new HopperActionCommand());
         getCommand("whereis").setExecutor(new WhereIsCommand());
+        getCommand("joininfo").setExecutor(new JoinInfoCommand());
 
         setupTPS();
 
@@ -210,6 +215,15 @@ public class HelpersPlugin extends JavaPlugin implements Listener {
         player.sendMessage("");
         player.sendMessage("");
 
+        if (!this.joinInfoMessages.isEmpty()) {
+            this.getServer().getScheduler().runTaskLater(this, () -> {
+                for (String msg : this.joinInfoMessages) {
+                    player.sendMessage(msg);
+                }
+                player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1, 1);
+            }, 20 * 12);
+        }
+
         // Paper's setViewDistance is no longer supported
 //        if (player.hasPermission("mcatlas.increasedrenderdistance")) {
 //            player.setViewDistance(8);
@@ -253,6 +267,20 @@ public class HelpersPlugin extends JavaPlugin implements Listener {
 
     public String getDynmapLink() {
         return this.dynmapLink;
+    }
+
+    public void setJoinInfoMessages(String[] msgs) {
+        this.joinInfoMessages.clear();
+        for (String msg : msgs) {
+            this.joinInfoMessages.add(msg);
+        }
+        getConfig().set("joinInfoMessages", this.joinInfoMessages);
+        saveConfig();
+    }
+
+    public void resetJoinInfoMessages() {
+        this.joinInfoMessages.clear();
+        saveConfig();
     }
 
     // chance out of 100
