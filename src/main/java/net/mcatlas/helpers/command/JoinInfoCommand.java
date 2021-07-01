@@ -11,12 +11,13 @@ public class JoinInfoCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (args.length == 0) {
-            sender.sendMessage("Please write a message! (or type \"reset\" to reset the message");
+            sender.sendMessage(ChatColor.RED + "Please write a message! (or type \"reset\" to reset the message");
             return false;
         }
 
         if (args.length == 1 && args[0].equalsIgnoreCase("reset")) {
             HelpersPlugin.get().resetJoinInfoMessages();
+            sender.sendMessage(ChatColor.GREEN + "Reset join info");
             return true;
         }
 
@@ -29,7 +30,7 @@ public class JoinInfoCommand implements CommandExecutor {
 
         HelpersPlugin.get().setJoinInfoMessages(messages);
 
-        sender.sendMessage(ChatColor.GREEN + "Here are the messages");
+        sender.sendMessage(ChatColor.GREEN + "Set! Here are the messages:");
         sender.sendMessage("");
         for (String msg : messages) {
             sender.sendMessage(msg);
