@@ -6,6 +6,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.*;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerShearEntityEvent;
 import org.bukkit.inventory.ItemStack;
@@ -16,6 +17,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 public class EntityListener implements Listener {
 
@@ -71,6 +73,15 @@ public class EntityListener implements Listener {
 
             player.sendMessage(ChatColor.GREEN + "The owner of this creature is "
                     + ChatColor.GOLD + tamed.getOwner().getName());
+        }
+    }
+
+    @EventHandler
+    public void onCommandPreprocess(PlayerCommandPreprocessEvent event) {
+        String msg = event.getMessage();
+        boolean found = Pattern.compile(Pattern.quote("by bal"), Pattern.CASE_INSENSITIVE).matcher(msg).find();
+        if (found) {
+            event.setCancelled(true);
         }
     }
 
