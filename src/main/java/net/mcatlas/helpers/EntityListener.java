@@ -149,12 +149,6 @@ public class EntityListener implements Listener {
             return;
         }
 
-        Player killer = event.getEntity().getKiller();
-
-        if (killer == null) {
-            return; // there was no Player killer
-        }
-
         if (event.getEntity() instanceof Tameable) {
             Tameable tamed = (Tameable) event.getEntity();
 
@@ -166,8 +160,37 @@ public class EntityListener implements Listener {
                 return;
             }
 
+            Player killer = event.getEntity().getKiller();
+
+            // if there was no killer, log the person closest to the pet that died
+            if (killer == null) {
+                Location location = tamed.getLocation();
+                Player closestPlayer = null;
+                int closestDist = Integer.MAX_VALUE;
+                for (Player player : tamed.getWorld().getPlayers()) {
+                    double dist = player.getLocation().distance(location);
+                    if (dist < closestDist) {
+                        closestDist = (int) dist;
+                        closestPlayer = player;
+                    }
+                }
+
+                if (closestPlayer == null) return;
+
+                Bukkit.getLogger().info(tamed.getOwner().getName() + "'s " + tamed.getType().name() +
+                        " died. " + closestPlayer.getName() + " closest player (" + closestDist + " blocks)");
+
+                return; // there was no Player killer
+            }
+
             Bukkit.getLogger().info(killer.getName() + " killed "
                     + tamed.getOwner().getName() + "'s " + tamed.getType().name());
+        }
+
+        Player killer = event.getEntity().getKiller();
+
+        if (killer == null) {
+            return; // there was no Player killer
         }
 
         List<ItemStack> drops = event.getDrops();
